@@ -4,14 +4,17 @@
     <div class="p-4">
       <router-view />
     </div>
+    <Footer/>
   </div>
 </template>
 
 <script type="text/javascript">
   import NavBar from "@/components/NavBar.vue";
+  import Footer from "@/components/Footer.vue";
   export default {
     components: {
-      NavBar, // register component
+      NavBar,
+      Footer
     },
   };
 </script>
