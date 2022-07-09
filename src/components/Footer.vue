@@ -1,5 +1,5 @@
 <template>
-    <footer class="absolute bottom-0 w-full">
+    <footer class="relative bottom-0 w-full">
         <div class="p-5 bg-gray-700 text-white grid justify-items-center">
             <p>Copyright © 2022 Brady Farley Inc. All Rights Reserved</p>
         </div>
