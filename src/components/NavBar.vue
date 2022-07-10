@@ -104,6 +104,7 @@ export default {
     },
     methods: {
         updateSelection: function(selection) {
+            this.isShown = false;
             this.selectedTab = selection;
         },
         toggle: function() {
