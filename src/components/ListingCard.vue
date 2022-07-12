@@ -1,11 +1,11 @@
 <template>
     <div class="w-96 h-64 shadow-xl rounded-lg">
-        <img class="object-contain w-full h-40 bg-gray-400 rounded-t-lg" src="@/assets/contract-handshake.jpg">
+        <img class="object-cover w-full h-40 bg-gray-400 rounded-t-lg" :src="require(`@/assets/${image}`)">
         <div class="w-full h-24 bg-gray-100 border-r border-l border-b border-gray-300 rounded-b-lg">
             <div class="px-4 py-2 ">
                 <p class="font-semibold text-xl">${{dollarsPerMonth}}/month</p>
-                <p class="text-lg">{{numOfBeds}} bed {{numOfBaths}} bath - Shared Room</p>
-                <p class="text-sm">240 E 600 N Provo, UT 84606</p>
+                <p class="text-lg">{{numOfBeds}} bed {{numOfBaths}} bath - {{roomType}} Room</p>
+                <p class="text-sm">{{address}}</p>
             </div>
         </div>
     </div>
@@ -20,15 +20,30 @@ export default {
     props: {
         dollarsPerMonth: {
             type: String,
-            default: "----"
+            required: true,
+            default: "0"
+        },
+        address: {
+            type: String,
+            required: true,
+            default: "address"
+        },
+        image: {
+           type: String,
+           required: true,
+           default: "fake-house.jpg"
         },
         numOfBeds: {
             type: String,
-            default: "-"
+            default: "0"
         },
         numOfBaths: {
             type: String,
-            default: "-"
+            default: "0"
+        },
+        roomType: {
+            type: String,
+            default: "Shared"
         }
     },
     data: function() {

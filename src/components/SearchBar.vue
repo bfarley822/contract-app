@@ -1,7 +1,7 @@
 <template>
     <div class="flex items-center">
         <TextInput placeholder="Search Address" @input="handleInput"/>
-        <i class="fa-solid fa-magnifying-glass text-lg pl-2 text-gray-300"></i>
+        <i class="fa-solid fa-magnifying-glass text-lg pl-2 text-gray-400"></i>
     </div>
 </template>
 
