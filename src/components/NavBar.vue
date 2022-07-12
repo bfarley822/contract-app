@@ -8,7 +8,7 @@
                 CONTRAX
             </div>
         </router-link>
-        <div class="text-white flex items-center text-2xl">
+        <div class="text-white flex items-center text-lg">
             <router-link to="/">
                 <div :class="['py-1 px-4 mr-2 rounded-md hidden md:block', 
                              selectedTab === 'home' ? 'bg-white text-gray-700' : 'hover:bg-gray-500 hover:text-gray-400']" 
@@ -45,7 +45,7 @@
 
 
             <div class="block md:hidden pr-4">
-                <div class="text-3xl relative">
+                <div class="text-2xl relative">
                     <i class="fa-solid fa-bars cursor-pointer" @click="toggle"></i>
                 </div>
                 <div v-if="isShown" class="absolute top-16 right-8 bg-gray-500 select-none">
