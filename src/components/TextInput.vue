@@ -5,7 +5,7 @@
             v-model="input" 
             :placeholder="placeholder"
             class="w-96 h-8 border p-2 text-lg rounded"
-            @input="updateInput" :focus="true"/>
+        />
     </div>
 </template>
 
@@ -27,7 +27,10 @@ export default {
         }
     },
     methods: {
-        updateInput: function() {
+        
+    },
+    watch: {
+        input: function() {
             this.$emit('input', this.input);
         }
     },

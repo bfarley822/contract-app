@@ -22,7 +22,7 @@ export default {
     },
     methods: {
         handleInput: function(input) {
-            console.log(input);
+            this.$emit('input', input);
         }
     },
     computed: {
