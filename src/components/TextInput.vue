@@ -2,7 +2,8 @@
     <div>
         <input 
             type="text" 
-            v-model="input" 
+            :value="value"
+            @input="$emit('update', $event.target.value)"
             :placeholder="placeholder"
             class="w-96 h-8 border p-2 text-lg rounded"
         />
@@ -19,20 +20,18 @@ export default {
         placeholder: {
             type: String,
             default: ""
+        },
+        value: {
+            type: String
         }
     },
     data: function() {
         return {
-            input: ""
+            
         }
     },
     methods: {
         
-    },
-    watch: {
-        input: function() {
-            this.$emit('input', this.input);
-        }
     },
     computed: {
         

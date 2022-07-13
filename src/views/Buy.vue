@@ -2,10 +2,10 @@
   <div>
     <div class="grid justify-items-center">
         <div class="flex flex-col md:flex-row flex-wrap items-center">
-            <SearchBar @input="setSearchInput"/>
+            <SearchBar @update="setSearchInput"/>
             <Dropdown 
                 class="pl-0 md:pl-8 pt-2 md:pt-0" 
-                leftLabel="Filter by:" 
+                leftLabel="Sort by:" 
                 :options="filterOptions" 
                 @change="setFilter"
             />
@@ -63,15 +63,23 @@ export default {
         },
         listingsBySearchInput: function() {
             if (this.searchInput !== "") {
-                return this.listings.filter(listing => listing.address.includes(this.searchInput));
+                return this.listings.filter(listing => listing.address.toLowerCase().includes(this.searchInput.toLowerCase()));
             }
             else {
                 return this.listings;
             }
         },
+        listingsByRoomType: function(currListings) {
+            if (this.roomType === "both") {
+                return currListings;
+            }
+            else {
+                return currListings.filter(listing => listing.roomType === this.roomType);
+            }
+        },
         listingsByFilter: function(currListings) {
             if (this.filter === "none") {
-                return currListings;
+                return currListings.sort((a,b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0));
             }
             else if (this.filter === "priceHL") {
                 return currListings.sort((a,b) => (a.price > b.price) ? 1 : ((b.price > a.price) ? -1 : 0));
@@ -88,21 +96,13 @@ export default {
             else {
                 return [];
             }
-        },
-        listingsByRoomType: function(currListings) {
-            if (this.roomType === "both") {
-                return currListings;
-            }
-            else {
-                return currListings.filter(listing => listing.roomType === this.roomType);
-            }
-        },
+        }
     },
     computed: {
         filteredListings: function() {
             var updatedListings = this.listingsBySearchInput();
-            updatedListings = this.listingsByFilter(updatedListings);
             updatedListings = this.listingsByRoomType(updatedListings);
+            updatedListings = this.listingsByFilter(updatedListings);
             return updatedListings;
         },
         filterOptions: function() {

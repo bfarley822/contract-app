@@ -45,10 +45,7 @@ export default {
         }
     },
     methods: {
-        handleSelection: function() {
-            //var value = event.target.options[event.target.options.selectedIndex].text;
-            //this.$emit('change', this.selection);
-        }
+        
     },
     computed: {
         

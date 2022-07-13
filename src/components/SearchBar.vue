@@ -1,6 +1,6 @@
 <template>
     <div class="flex items-center">
-        <TextInput placeholder="Search Address" @input="handleInput"/>
+        <TextInput placeholder="Search Address" @update="handleInput"/>
         <i class="fa-solid fa-magnifying-glass text-lg pl-2 text-gray-400"></i>
     </div>
 </template>
@@ -22,7 +22,7 @@ export default {
     },
     methods: {
         handleInput: function(input) {
-            this.$emit('input', input);
+            this.$emit('update', input);
         }
     },
     computed: {
