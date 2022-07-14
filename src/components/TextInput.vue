@@ -5,7 +5,7 @@
             :value="value"
             @input="$emit('update', $event.target.value)"
             :placeholder="placeholder"
-            class="w-96 h-8 border p-2 text-lg rounded"
+            :class="['h-8 border p-2 rounded', customWidth, txtSize]"
         />
     </div>
 </template>
@@ -23,6 +23,14 @@ export default {
         },
         value: {
             type: String
+        },
+        width: {
+            type: String,
+            default: ""
+        },
+        textSize: {
+            type: String,
+            default: "md"
         }
     },
     data: function() {
@@ -34,7 +42,12 @@ export default {
         
     },
     computed: {
-        
+        customWidth: function() {
+            return "w-" + this.width;
+        },
+        txtSize: function() {
+            return "text-" + this.textSize;
+        }
     }
 };
 </script>
