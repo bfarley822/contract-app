@@ -2,7 +2,7 @@
     <div>
         <button 
             type="button" 
-            :class="['border rounded py-1 px-4 text-lg', bgColor, opacity, txtColor]" 
+            :class="['border rounded py-1 px-4 text-lg hover:opacity-80', bgColor, opacity, txtColor]" 
             @mousedown="mouseDown = true" 
             @mouseup="handleClick"
         >

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <p class="text-3xl w-full border-b font-medium">Create Post</p>
-    <div class="grid grid-cols-1 lg:grid-cols-2">
+    <p class="text-3xl w-full border-b font-semibold flex justify-center md:justify-start">Create Post</p>
+    <div class="grid grid-cols-1 md:grid-cols-2">
       <div class="lg:border-r border-b p-4">
         <p class="text-2xl pb-4 flex justify-center">Add Details</p>
         <div class="grid grid-cols-2 gap-2 items-center formGridStyle">
@@ -27,15 +27,18 @@
       </div>
       <div class="grid justify-items-center border-b pt-4 pb-8 pl-4">
         <p class="text-2xl pb-4">Upload Images</p>
+        <input type="file" name="file" id="file" accept="image/png, image/jpeg" multiple @change="handleFiles" class="hidden"/>
+        <label for="file" class="mb-4 cursor-pointer border border-gray-300 rounded py-1 px-4 text-lg bg-gray-200 text-gray-700 hover:opacity-80">Select Images</label>
         <div class="border w-full h-full bg-white">
-          <div class="p-4 grid grid-cols-1 2xl:grid-cols-2 justify-items-center gap-2 w-full h-96 overflow-y-auto">
-            <div class="w-80 h-64 bg-gray-300"></div>
-            <div class="w-80 h-64 bg-gray-300"></div>
-            <div class="w-80 h-64 bg-gray-300"></div>
-            <div class="w-80 h-64 bg-gray-300"></div>
+          <div v-if="images.length === 0" class="grid place-content-center customHeight">
+            <p class="text-gray-300">No images</p>
+          </div>
+          <div v-else class="p-4 grid grid-cols-1 2xl:grid-cols-2 justify-items-center gap-2 w-full customHeight overflow-y-auto">
+            <template v-for="image in images" :key="image">
+              <img class="object-cover w-full h-64" :src="require(`@/assets/${image}`)">
+            </template>
           </div>
         </div>
-        <Button text="Select Images" backgroundColor="gray-200" textColor="gray-700" class="pt-4"/>
       </div>
     </div>
     <div class="grid justify-items-center pt-4">
@@ -72,7 +75,8 @@ export default {
             state: "",
             city: "",
             addressL2: "",
-            addressL1: ""
+            addressL1: "",
+            images: []
         }
     },
     methods: {
@@ -102,6 +106,12 @@ export default {
         },
         handleAL1: function(value) {
           this.addressL1 = value;
+        },
+        handleFiles: function(event) {
+          this.images = [];
+          Object.entries(event.target.files).forEach((image) => {
+            this.images.push(image[1].name);
+          });
         }
     },
     computed: {
@@ -124,5 +134,8 @@ export default {
 <style scoped>
   .formGridStyle {
     grid-template-columns: 40% 60%;
+  }
+  .customHeight {
+    height: 36rem;
   }
 </style>
