@@ -26,7 +26,8 @@
                 :numOfBeds="listing.bedrooms"
                 :numOfBaths="listing.bathrooms"
                 :roomType="listing.roomType"
-                :image="listing.image"/>
+                :image="listing.image"
+                class="w-96"/>
         </template>
     </div>
   </div>

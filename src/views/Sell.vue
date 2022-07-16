@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="text-3xl w-full border-b font-medium flex justify-center md:justify-start">Create Post</p>
+    <p class="text-3xl w-full border-b font-medium flex justify-center md:justify-start">Create Listing</p>
     <div class="grid grid-cols-1 md:grid-cols-2">
       <div class="lg:border-r border-b p-4">
         <p class="text-2xl pb-4 flex justify-center">Add Details</p>

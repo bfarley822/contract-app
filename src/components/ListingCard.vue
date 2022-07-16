@@ -1,5 +1,5 @@
 <template>
-    <div class="w-96 h-64 shadow-xl rounded-lg">
+    <div class="h-64 shadow-md rounded-lg hover:shadow-xl transition-shadow duration-300 ease-in-out cursor-pointer">
         <img class="object-cover w-full h-40 bg-gray-400 rounded-t-lg" :src="require(`@/assets/${image}`)">
         <div class="w-full h-24 bg-gray-100 border-r border-l border-b border-gray-300 rounded-b-lg">
             <div class="px-4 py-2 ">

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pt-4">
     <div class="grid md:grid-cols-2 gap-4 md:gap-8 border-b">
       <div class="grid justify-items-center md:justify-self-end">
         <p class="text-2xl flex justify-center md:justify-end pb-4 md:mr-1 md:hidden">Account Details</p>
@@ -29,6 +29,23 @@
         <Button :text="buttonText" backgroundColor="blue-700" class="flex justify-center md:justify-end py-8 md:mr-6" @isClick="handleUpdateDetails"/>
       </div>
     </div>
+    <div>
+      <p class="text-2xl pt-4 pb-8 md:pt-8">Saved Listings</p>
+      <div class="flex items-center overflow-x-auto">
+        <div class="flex flex-nowrap pb-4">
+          <template v-for="listing in listings" :key="listing.id">
+            <ListingCard 
+                :address="listing.address"
+                :dollarsPerMonth="listing.price" 
+                :numOfBeds="listing.bedrooms"
+                :numOfBaths="listing.bathrooms"
+                :roomType="listing.roomType"
+                :image="listing.image"
+                class="mr-4 w-72 md:w-96"/>
+        </template>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -36,12 +53,14 @@
 import FormGridLabel from "@/components/FormGridLabel.vue";
 import TextInput from "@/components/TextInput.vue";
 import Button from "@/components/Button.vue";
+import ListingCard from "@/components/ListingCard.vue";
 export default {
     name: "Account",
     components: {
         FormGridLabel,
         TextInput,
-        Button
+        Button,
+        ListingCard
     },  
     props: {
         
@@ -49,7 +68,8 @@ export default {
     data: function() {
         return {
             image: "",
-            allDisabled: true
+            allDisabled: true,
+            listings: []
         }
     },
     methods: {
@@ -64,6 +84,46 @@ export default {
         buttonText: function() {
           return this.allDisabled ? 'Update Details' : 'Save Changes';
         }
+    },
+    created: function() {
+        this.listings = [
+            {
+                id: "0",
+                address: "240 E 600 N Apt. 2 Provo, UT 84606",
+                price: "780",
+                bedrooms: "2",
+                bathrooms: "1",
+                roomType: "Shared",
+                image: "contract-handshake.jpg"
+            },
+            {
+                id: "1",
+                address: "240 N 600 E Apt. 4 Provo, UT 84606",
+                price: "1,000",
+                bedrooms: "3",
+                bathrooms: "1.5",
+                roomType: "Private",
+                image: "fake-house.jpg"
+            },
+            {
+                id: "2",
+                address: "240 E 600 N Apt. 2 Provo, UT 84606",
+                price: "780",
+                bedrooms: "2",
+                bathrooms: "1",
+                roomType: "Shared",
+                image: "contract-handshake.jpg"
+            },
+            {
+                id: "3",
+                address: "240 N 600 E Apt. 4 Provo, UT 84606",
+                price: "1,000",
+                bedrooms: "3",
+                bathrooms: "1.5",
+                roomType: "Private",
+                image: "fake-house.jpg"
+            }
+        ]
     }
 };
 </script>

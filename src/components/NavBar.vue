@@ -1,7 +1,7 @@
 <template>
     <!-- class="sticky top-0 z-50" -->
   <header> 
-    <div class="w-full flex justify-between p-5 bg-gray-700">
+    <div class="w-full flex justify-between py-2 px-4 bg-gray-700">
         <router-link to="/">
             <div class="flex items-center text-white text-4xl" @click="updateSelection('home')">
                 <img src="@/assets/handshake.png" class="w-16 pr-4">
