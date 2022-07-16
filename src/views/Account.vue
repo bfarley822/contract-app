@@ -4,7 +4,7 @@
       <div class="grid justify-items-center md:justify-self-end">
         <p class="text-2xl flex justify-center md:justify-end pb-4 md:mr-1 md:hidden">Account Details</p>
         <img v-if="image !== ''" class="object-cover w-80 h-80" :src="require(`@/assets/${image}`)">
-        <div v-else class="object-cover w-80 h-80 bg-white border grid place-content-center">
+        <div v-else :class="['object-cover w-80 h-80 border grid place-content-center', allDisabled ? 'bg-[#F6F7F7]' : 'bg-white']">
           <p class="text-gray-300">No profile picture</p>
         </div>
         <input type="file" name="file" id="file" accept="image/png, image/jpeg" @change="handleImage" class="hidden"/>

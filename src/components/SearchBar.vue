@@ -1,6 +1,6 @@
 <template>
     <div class="flex items-center">
-        <TextInput placeholder="Search Address" width="96" textSize="lg" @update="handleInput"/>
+        <TextInput placeholder="Search Address" width="80" textSize="lg" @update="handleInput"/>
         <i class="fa-solid fa-magnifying-glass text-lg pl-2 text-gray-400"></i>
     </div>
 </template>

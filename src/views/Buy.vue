@@ -27,7 +27,7 @@
                 :numOfBaths="listing.bathrooms"
                 :roomType="listing.roomType"
                 :image="listing.image"
-                class="w-96"/>
+                class="w-80 md:w-96"/>
         </template>
     </div>
   </div>
