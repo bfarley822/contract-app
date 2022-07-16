@@ -41,6 +41,14 @@
                      Account
                 </div>
             </router-link>
+            <router-link to="login">
+                <div :class="['py-1 px-4 rounded-md hidden md:block', 
+                             selectedTab === 'login' ? 'bg-white text-gray-700' : 'hover:bg-gray-500 hover:text-gray-400']"
+                     @click="updateSelection('login')"
+                >
+                     Login
+                </div>
+            </router-link>
 
 
 
@@ -51,35 +59,53 @@
                 <div v-if="isShown" class="absolute top-12 right-10 bg-gray-500 select-none z-50">
                     <div class="p-4 grid grid-cols-1 gap-y-2 justify-items-center">
                         <router-link to="/">
-                            <div :class="['py-1 px-4 mr-2 rounded-md', 
+                            <div>
+                                <div :class="['py-1 px-4 rounded-md', 
                                         selectedTab === 'home' ? 'bg-white text-gray-700' : 'hover:bg-gray-400 hover:text-gray-300']" 
-                                @click="updateSelection('home')"
-                            >
-                                Home
+                                    @click="updateSelection('home')"
+                                >
+                                    Home
+                                </div>
                             </div>
                         </router-link>
                         <router-link to="buy">
-                            <div :class="['py-1 px-4 mr-2 rounded-md', 
+                            <div>
+                                <div :class="['py-1 px-4 rounded-md', 
                                         selectedTab === 'buy' ? 'bg-white text-gray-700' : 'hover:bg-gray-400 hover:text-gray-300']"
-                                @click="updateSelection('buy')"
-                            >
-                                Buy
+                                    @click="updateSelection('buy')"
+                                >
+                                    Buy
+                                </div>
                             </div>
                         </router-link>
                         <router-link to="sell">
-                            <div :class="['py-1 px-4 mr-2 rounded-md', 
-                                        selectedTab === 'sell' ? 'bg-white text-gray-700' : 'hover:bg-gray-400 hover:text-gray-300']"
-                                @click="updateSelection('sell')"
-                            >
-                                Sell
+                            <div class="border-b pb-2">
+                                <div :class="['py-1 px-4 rounded-md', 
+                                            selectedTab === 'sell' ? 'bg-white text-gray-700' : 'hover:bg-gray-400 hover:text-gray-300']"
+                                    @click="updateSelection('sell')"
+                                >
+                                    Sell
+                                </div>
                             </div>
                         </router-link>
                         <router-link to="account">
-                            <div :class="['py-1 px-4 rounded-md', 
-                                        selectedTab === 'account' ? 'bg-white text-gray-700' : 'hover:bg-gray-400 hover:text-gray-300']"
-                                @click="updateSelection('account')"
-                            >
-                                Account
+                            <div>
+                                <div :class="['py-1 px-4 rounded-md', 
+                                            selectedTab === 'account' ? 'bg-white text-gray-700' : 'hover:bg-gray-400 hover:text-gray-300']"
+                                    @click="updateSelection('account')"
+                                >
+                                    Account
+                                </div>
+                            </div>
+                        </router-link>
+                        <router-link to="login">
+                            <div>
+                                <div :class="['py-1 px-4 rounded-md', 
+                                            selectedTab === 'login' ? 'bg-white text-gray-700' : 'hover:bg-gray-400 hover:text-gray-300']"
+                                    @click="updateSelection('login')"
+                                >
+                                    Login
+                                </div>
                             </div>
                         </router-link>
                     </div>
