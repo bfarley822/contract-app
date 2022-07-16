@@ -2,6 +2,7 @@
     <div>
         <button 
             type="button" 
+            :disabled="disabled"
             :class="['border rounded py-1 px-4 text-lg hover:opacity-80', bgColor, opacity, txtColor]" 
             @mousedown="mouseDown = true" 
             @mouseup="handleClick"
@@ -29,6 +30,10 @@ export default {
         textColor: {
             type: String,
             default: "white"
+        },
+        disabled: {
+            type: Boolean,
+            default: false
         }
     },
     data: function() {
@@ -39,7 +44,7 @@ export default {
     methods: {
         handleClick: function() {
             this.mouseDown = false
-            this.$emit('click');
+            this.$emit('isClick');
         }
     },
     computed: {

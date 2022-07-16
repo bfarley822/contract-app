@@ -5,6 +5,7 @@
             :value="value"
             @input="$emit('update', $event.target.value)"
             :placeholder="placeholder"
+            :disabled="disabled"
             :class="['h-8 border p-2 rounded', customWidth, txtSize]"
         />
     </div>
@@ -31,6 +32,10 @@ export default {
         textSize: {
             type: String,
             default: "md"
+        },
+        disabled: {
+            type: Boolean,
+            default: false
         }
     },
     data: function() {
