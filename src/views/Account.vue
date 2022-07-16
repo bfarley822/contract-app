@@ -1,16 +1,19 @@
 <template>
   <div>
-    <div class="grid grid-cols-3 gridStyle border-b">
-      <div class="grid justify-items-center">
+    <div class="grid md:grid-cols-2 gap-4 md:gap-8 border-b">
+      <div class="grid justify-items-center md:justify-self-end">
+        <p class="text-2xl flex justify-center md:justify-end pb-4 md:mr-1 md:hidden">Account Details</p>
         <img v-if="image !== ''" class="object-cover w-80 h-80" :src="require(`@/assets/${image}`)">
         <div v-else class="object-cover w-80 h-80 bg-white border grid place-content-center">
           <p class="text-gray-300">No profile picture</p>
         </div>
         <input type="file" name="file" id="file" accept="image/png, image/jpeg" @change="handleImage" class="hidden"/>
-        <label for="file" class="mb-4 cursor-pointer border border-gray-300 rounded py-1 px-4 text-lg bg-gray-200 text-gray-700 hover:opacity-80 mt-4">Upload Picture</label>
+        <label for="file" :class="['md:mb-8 cursor-pointer border border-gray-300 rounded py-1 px-4 text-lg bg-gray-200 text-gray-700 hover:opacity-80 mt-4', {'invisible' : allDisabled}]">Upload Picture</label>
       </div>
-      <div class="flex flex-col justify-between">
-        <p class="text-2xl pb-4 flex justify-center">Account Details</p>
+      <div class="flex flex-col justify-between md:justify-self-start">
+        <div class="hidden md:block">
+          <p class="text-2xl flex justify-center md:justify-end pb-4 md:mr-4">Account Details</p>
+        </div>
         <div class="grid gri-cols-2 gap-2 items-center formGridStyle">
           <FormGridLabel text="First Name"/>
           <TextInput :disabled="allDisabled"/>
@@ -23,7 +26,7 @@
           <FormGridLabel text="Password"/>
           <TextInput :disabled="allDisabled"/>
         </div>
-        <Button :text="buttonText" backgroundColor="blue-700" class="flex justify-center pb-4" @isClick="handleUpdateDetails"/>
+        <Button :text="buttonText" backgroundColor="blue-700" class="flex justify-center md:justify-end py-8 md:mr-6" @isClick="handleUpdateDetails"/>
       </div>
     </div>
   </div>
@@ -59,7 +62,7 @@ export default {
     },
     computed: {
         buttonText: function() {
-          return this.allDisabled ? 'Update' : 'Save';
+          return this.allDisabled ? 'Update Details' : 'Save Changes';
         }
     }
 };
@@ -70,6 +73,6 @@ export default {
   grid-template-columns: minmax(320px, 320px) 50% 50%
 }
 .formGridStyle {
-  grid-template-columns: 40% 60%;
+  grid-template-columns: 37% 60%;
 }
 </style>
