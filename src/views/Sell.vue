@@ -33,7 +33,7 @@
           <div v-if="images.length === 0" class="grid place-content-center customHeight">
             <p class="text-gray-300">No images</p>
           </div>
-          <div v-else class="p-4 grid grid-cols-1 2xl:grid-cols-2 justify-items-center gap-2 w-full customHeight overflow-y-auto">
+          <div v-else class="p-4 grid grid-cols-1 xl:grid-cols-2 justify-items-center gap-2 w-full customHeight overflow-y-auto">
             <template v-for="image in images" :key="image">
               <img class="object-cover w-full h-64" :src="require(`@/assets/${image}`)">
             </template>

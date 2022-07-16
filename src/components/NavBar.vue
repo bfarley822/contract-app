@@ -48,10 +48,10 @@
                 <div class="text-2xl relative">
                     <i class="fa-solid fa-bars cursor-pointer" @click="toggle"></i>
                 </div>
-                <div v-if="isShown" class="absolute top-16 right-8 bg-gray-500 select-none z-50">
-                    <div class="px-6 py-6 grid grid-cols-1 gap-y-2">
+                <div v-if="isShown" class="absolute top-12 right-10 bg-gray-500 select-none z-50">
+                    <div class="p-4 grid grid-cols-1 gap-y-2 justify-items-center">
                         <router-link to="/">
-                            <div :class="['py-1 px-4 w-4/5 mr-2 rounded-md', 
+                            <div :class="['py-1 px-4 mr-2 rounded-md', 
                                         selectedTab === 'home' ? 'bg-white text-gray-700' : 'hover:bg-gray-400 hover:text-gray-300']" 
                                 @click="updateSelection('home')"
                             >
@@ -59,7 +59,7 @@
                             </div>
                         </router-link>
                         <router-link to="buy">
-                            <div :class="['py-1 px-4 w-3/5 mr-2 rounded-md', 
+                            <div :class="['py-1 px-4 mr-2 rounded-md', 
                                         selectedTab === 'buy' ? 'bg-white text-gray-700' : 'hover:bg-gray-400 hover:text-gray-300']"
                                 @click="updateSelection('buy')"
                             >
@@ -67,7 +67,7 @@
                             </div>
                         </router-link>
                         <router-link to="sell">
-                            <div :class="['py-1 px-4 w-3/5 mr-2 rounded-md', 
+                            <div :class="['py-1 px-4 mr-2 rounded-md', 
                                         selectedTab === 'sell' ? 'bg-white text-gray-700' : 'hover:bg-gray-400 hover:text-gray-300']"
                                 @click="updateSelection('sell')"
                             >
