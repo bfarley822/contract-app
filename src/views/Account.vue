@@ -19,11 +19,9 @@
           <TextInput :disabled="allDisabled"/>
           <FormGridLabel text="Last Name"/>
           <TextInput :disabled="allDisabled"/>
-          <FormGridLabel text="Phone Number"/>
-          <TextInput :disabled="allDisabled"/>
           <FormGridLabel text="Email"/>
           <TextInput :disabled="allDisabled"/>
-          <FormGridLabel text="Password"/>
+          <FormGridLabel text="Phone Number"/>
           <TextInput :disabled="allDisabled"/>
         </div>
         <Button :text="buttonText" backgroundColor="blue-700" class="flex justify-center md:justify-end py-8 md:mr-6" @isClick="handleUpdateDetails"/>
