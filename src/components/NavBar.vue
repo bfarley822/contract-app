@@ -33,15 +33,15 @@
                      Sell
                 </div>
             </router-link>
-            <router-link to="account">
+            <router-link to="account" v-if="$store.state.isLoggedIn">
                 <div :class="['py-1 px-4 rounded-md hidden md:block', 
                              selectedTab === 'account' ? 'bg-white text-gray-700' : 'hover:bg-gray-500 hover:text-gray-400']"
                      @click="updateSelection('account')"
                 >
-                     Account
+                Account
                 </div>
             </router-link>
-            <router-link to="login">
+            <router-link to="login" v-if="!$store.state.isLoggedIn">
                 <div :class="['py-1 px-4 rounded-md hidden md:block', 
                              selectedTab === 'login' ? 'bg-white text-gray-700' : 'hover:bg-gray-500 hover:text-gray-400']"
                      @click="updateSelection('login')"
@@ -49,6 +49,9 @@
                      Login
                 </div>
             </router-link>
+            <div v-if="$store.state.isLoggedIn" class="pl-2 hidden md:block">
+                <img class="object-cover w-9 h-9 rounded-full" :src="require(`@/assets/contract-handshake.jpg`)">
+            </div>
 
 
 
@@ -56,7 +59,7 @@
                 <div class="text-2xl relative">
                     <i class="fa-solid fa-bars cursor-pointer" @click="toggle"></i>
                 </div>
-                <div v-if="isShown" class="absolute top-12 right-10 bg-gray-500 select-none z-50">
+                <div v-if="isShown" class="absolute top-12 right-10 bg-gray-500 select-none z-40">
                     <div class="p-4 grid grid-cols-1 gap-y-2 justify-items-center">
                         <router-link to="/">
                             <div>
@@ -88,7 +91,7 @@
                                 </div>
                             </div>
                         </router-link>
-                        <router-link to="account">
+                        <router-link to="account" v-if="$store.state.isLoggedIn">
                             <div>
                                 <div :class="['py-1 px-4 rounded-md', 
                                             selectedTab === 'account' ? 'bg-white text-gray-700' : 'hover:bg-gray-400 hover:text-gray-300']"
@@ -98,7 +101,7 @@
                                 </div>
                             </div>
                         </router-link>
-                        <router-link to="login">
+                        <router-link to="login" v-if="!$store.state.isLoggedIn">
                             <div>
                                 <div :class="['py-1 px-4 rounded-md', 
                                             selectedTab === 'login' ? 'bg-white text-gray-700' : 'hover:bg-gray-400 hover:text-gray-300']"

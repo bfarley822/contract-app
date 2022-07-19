@@ -5,18 +5,21 @@ export default createStore({
 
     },
     state: {
-        firstName: 'John',
-        lastName: 'Doe'
+        user: {},
+        isLoggedIn: false
     },
     mutations: {
-
+        setUser (state, user) {
+            state.user = user;
+        },
+        setLoggedIn (state) {
+            state.isLoggedIn = true;
+        }
     },
     actions: {
 
     },
     getters: {
-        fullName: function (state) {
-            return `${state.firstName} ${state.lastName}`;
-        }
+        
     }
 })

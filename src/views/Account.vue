@@ -28,6 +28,23 @@
       </div>
     </div>
     <div>
+      <p class="text-2xl pt-4 pb-8 md:pt-8">My Listings</p>
+      <div class="flex items-center overflow-x-auto">
+        <div class="flex flex-nowrap pb-4">
+          <template v-for="listing in listings" :key="listing.id">
+            <ListingCard 
+                :address="listing.address"
+                :dollarsPerMonth="listing.price" 
+                :numOfBeds="listing.bedrooms"
+                :numOfBaths="listing.bathrooms"
+                :roomType="listing.roomType"
+                :image="listing.image"
+                class="mr-4 w-72 md:w-96"/>
+        </template>
+        </div>
+      </div>
+    </div>
+    <div>
       <p class="text-2xl pt-4 pb-8 md:pt-8">Saved Listings</p>
       <div class="flex items-center overflow-x-auto">
         <div class="flex flex-nowrap pb-4">
@@ -52,6 +69,7 @@ import FormGridLabel from "@/components/FormGridLabel.vue";
 import TextInput from "@/components/TextInput.vue";
 import Button from "@/components/Button.vue";
 import ListingCard from "@/components/ListingCard.vue";
+//import { updateUser } from '@/firebase';
 export default {
     name: "Account",
     components: {
@@ -84,6 +102,7 @@ export default {
         }
     },
     created: function() {
+      
         this.listings = [
             {
                 id: "0",

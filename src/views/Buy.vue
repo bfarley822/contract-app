@@ -16,6 +16,15 @@
                 @change="setRoomType"
                 defaultOption="both"
             />
+            <Popup
+                v-show="showListingPopup"
+                :popupTitle="selectedListing.address"
+                @close="showListingPopup = false"
+            >
+                <div>
+                    Test message
+                </div>
+            </Popup>
         </div>
     </div>
     <div class="pt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 justify-items-center">
@@ -27,7 +36,8 @@
                 :numOfBaths="listing.bathrooms"
                 :roomType="listing.roomType"
                 :image="listing.image"
-                class="w-80 md:w-96"/>
+                class="w-80 md:w-96"
+                @click="handleListingClick(listing)"/>
         </template>
     </div>
   </div>
@@ -37,19 +47,23 @@
 import SearchBar from "@/components/SearchBar.vue";
 import ListingCard from "@/components/ListingCard.vue";
 import Dropdown from "@/components/Dropdown.vue";
+import Popup from "@/components/Popup.vue";
 export default {
     name: "Buy",
     components: {
         SearchBar,
         ListingCard,
-        Dropdown
+        Dropdown,
+        Popup
     },  
     data: function() {
         return {
             searchInput: "",
             filter: "none",
             roomType: "both",
-            listings: []
+            listings: [],
+            showListingPopup: false,
+            selectedListing: {}
         }
     },
     methods: {
@@ -97,6 +111,10 @@ export default {
             else {
                 return [];
             }
+        },
+        handleListingClick: function(listing) {
+            this.showListingPopup = true;
+            this.selectedListing = listing;
         }
     },
     computed: {
