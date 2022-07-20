@@ -1,7 +1,5 @@
-import { initializeApp } from 'firebase/app';
+import firebase from 'firebase';
 import 'firebase/firestore'
-//import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-//import { ref, onUnmounted } from 'vue'
 
 const config = {
     apiKey: "AIzaSyBP_Wz-cQXegrLzCxKHXOvX2_5IXsIFu8U",
@@ -13,9 +11,7 @@ const config = {
     measurementId: "G-CKXX59JM4Z"
 };
 
-const firebaseApp = initializeApp(config);
-
-//const auth = getAuth(firebaseApp);
+const firebaseApp = firebase.initializeApp(config);
 
 const db = firebaseApp.firestore();
 const usersCollection = db.collection('users');
@@ -37,12 +33,39 @@ export const deleteUser = id => {
     return usersCollection.doc(id).delete();
 }
 
-// export const createAuthenticatedUser = async (email, password) => {
-//     const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
-//     console.log(userCredentials.user);
-// }
+export const registerUser = (email, password, name) => {
+    firebase.auth().createUserWithEmailAndPassword(email, password).then(() => {
+        const user = firebase.auth().currentUser;
+        user.updateProfile({
+            displayName: name
+        });
+    }).catch(error => {
+        alert(error.message);
+    });
+}
 
-// export const loginUser = async (email, password) => {
-//    const userCredentials = await signInWithEmailAndPassword(auth, email, password);
-//    console.log(userCredentials.user);
-// }
+export const loginUser = async (email, password) => {
+    firebase.auth().signInWithEmailAndPassword(email, password).then(() => {
+        const user = firebase.auth().currentUser;
+        user.updateProfile({
+            displayName: "Brady Farley"
+        });
+    }).catch(error => {
+        let errMsg = "";
+        switch (error.code) {
+            case 'auth/invalid-email':
+                errMsg = 'Invalid email'
+                break
+            case 'auth/user-not-found':
+                errMsg = 'No account with that email was found'
+                break
+            case 'auth/wrong-password':
+                errMsg = 'Incorrect password'
+                break
+            default:
+                errMsg = 'Email or password was incorrect'
+                break
+        }
+        alert(errMsg);
+    });
+}

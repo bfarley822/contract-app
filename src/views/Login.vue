@@ -24,11 +24,14 @@
                     <FormGridLabel text="Last Name"/>
                     <TextInput @update="handleLastName"/>
                     <FormGridLabel text="Email"/>
-                    <TextInput @update="handleEmail"/>
+                    <TextInput type="email" @update="handleEmail"/>
                     <FormGridLabel text="Password" class="pt-8"/>
-                    <TextInput class="pt-8" @update="handlePassword"/>
-                    <FormGridLabel text="Confirm Pass"/>
-                    <TextInput/>
+                    <TextInput type="password" class="pt-8" @update="handlePassword"/>
+                    <div></div>
+                    <TextInput type="password" placeholder="Confirm Password" @update="handlePasswordConfirmation"/>
+                    <div class="col-span-2 grid justify-items-center text-sm text-gray-400">
+                        <p>(Password must be at least 5 characters)</p>
+                    </div>
                 </div>
                 <div class="grid justify-items-center py-8">
                     <Button text="Create Account" backgroundColor="blue-700" @isClick="createAccount"/>
@@ -42,6 +45,7 @@
 import TextInput from "@/components/TextInput.vue";
 import Button from "@/components/Button.vue";
 import FormGridLabel from "@/components/FormGridLabel.vue";
+import {registerUser, loginUser} from "@/firebase.js";
 export default {
     name: "Login",
     components: {
@@ -63,7 +67,8 @@ export default {
             loginInfo: {
                 email: "",
                 password: ""
-            }
+            },
+            confirmPassword: ""
         }
     },
     watch: {
@@ -82,9 +87,13 @@ export default {
         handlePassword: function(password) {
             this.newUser.password = password;
         },
+        handlePasswordConfirmation: function(password) {
+            this.confirmPassword = password;
+        },
         createAccount: async function() {
-            //createUserWithEmailAndPassword(getAuth(), this.newUser.email, this.newUser.password)
-            // await createAuthenticatedUser(this.newUser.email, this.newUser.password);
+            if (this.hasValidSignupInfo) {
+                await registerUser(this.newUser.email, this.newUser.password, (this.newUser.firstName + " " + this.newUser.lastName));
+            }
             // this.$store.commit('setUser', this.newUser);
             // this.$store.commit('setLoggedIn');
             // this.$router.replace({name: "Home"});
@@ -96,14 +105,36 @@ export default {
             this.loginInfo.password = password;
         },
         login: async function() {
-            // await loginUser(this.loginInfo.email, this.loginInfo.password);
+            await loginUser(this.loginInfo.email, this.loginInfo.password);
             // this.$store.commit('setUser', this.loginInfo);
             // this.$store.commit('setLoggedIn');
             // this.$router.replace({name: "Home"});
         }
     },
     computed: {
-        
+        hasValidSignupInfo: function() {
+            if (!/^[a-zA-Z]+$/.test(this.newUser.firstName)) {
+                console.log("wrong first name")
+                return false;
+            }
+            else if (!/^[a-zA-Z]+$/.test(this.newUser.lastName)) {
+                console.log("wrong last name")
+                return false;
+            }
+            else if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.newUser.email)) {
+                console.log("wrong email")
+                return false;
+            }
+            else if (this.newUser.password != this.confirmPassword) {
+                return false;
+            }
+            else if (this.newUser.password.length < 5 || this.confirmPassword.length < 5) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
     }
 };
 </script>

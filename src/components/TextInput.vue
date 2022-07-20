@@ -1,9 +1,8 @@
 <template>
     <div>
         <input 
-            type="text" 
-            :value="value"
-            @input="$emit('update', $event.target.value)"
+            :type="type" 
+            v-model="text"
             :placeholder="placeholder"
             :disabled="disabled"
             :class="['h-8 border p-2 rounded', customWidth, txtSize]"
@@ -22,9 +21,6 @@ export default {
             type: String,
             default: ""
         },
-        value: {
-            type: String
-        },
         width: {
             type: String,
             default: ""
@@ -36,11 +32,15 @@ export default {
         disabled: {
             type: Boolean,
             default: false
+        },
+        type: {
+            type: String,
+            default: "text"
         }
     },
     data: function() {
         return {
-            
+            text: ""
         }
     },
     methods: {
@@ -52,6 +52,11 @@ export default {
         },
         txtSize: function() {
             return "text-" + this.textSize;
+        }
+    },
+    watch: {
+        text: function() {
+            this.$emit('update', this.text);
         }
     }
 };
