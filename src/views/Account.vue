@@ -16,13 +16,13 @@
         </div>
         <div class="grid gri-cols-2 gap-2 items-center formGridStyle">
           <FormGridLabel text="First Name"/>
-          <TextInput :disabled="allDisabled"/>
+          <TextInput :disabled="allDisabled" :text="user.firstName"/>
           <FormGridLabel text="Last Name"/>
-          <TextInput :disabled="allDisabled"/>
+          <TextInput :disabled="allDisabled" :text="user.lastName"/>
           <FormGridLabel text="Email"/>
-          <TextInput :disabled="allDisabled"/>
+          <TextInput :disabled="allDisabled" :text="user.email"/>
           <FormGridLabel text="Phone Number"/>
-          <TextInput :disabled="allDisabled"/>
+          <TextInput :disabled="allDisabled" :text="user.phoneNumber"/>
         </div>
         <Button :text="buttonText" backgroundColor="blue-700" class="flex justify-center md:justify-end py-8 md:mr-6" @isClick="handleUpdateDetails"/>
       </div>
@@ -99,6 +99,9 @@ export default {
     computed: {
         buttonText: function() {
           return this.allDisabled ? 'Update Details' : 'Save Changes';
+        },
+        user: function() {
+          return this.$store.state.user;
         }
     },
     created: function() {

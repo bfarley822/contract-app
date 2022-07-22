@@ -33,15 +33,22 @@ export const deleteUser = id => {
     return usersCollection.doc(id).delete();
 }
 
-export const registerUser = (email, password, name) => {
-    firebase.auth().createUserWithEmailAndPassword(email, password).then(() => {
+export const registerUser = async (email, password, name) => {
+    let errMsg = "";
+    await firebase.auth().createUserWithEmailAndPassword(email, password).then(() => {
         const user = firebase.auth().currentUser;
         user.updateProfile({
             displayName: name
         });
+        // user.sendEmailVerification().then(() => {
+        //     alert("verification email sent")
+        // }).catch(error => {
+        //     alert(error);
+        // });
     }).catch(error => {
-        alert(error.message);
+        errMsg = error.message;
     });
+    return errMsg;
 }
 
 export const loginUser = async (email, password) => {
@@ -67,4 +74,12 @@ export const loginUser = async (email, password) => {
         return errMsg;
     });
     return errMsg != "" ? errMsg : user;
+}
+
+export const resetPassword = async (email) => {
+    await firebase.auth().sendPasswordResetEmail(email.toString()).then(() => {
+        
+    }).catch(error => {
+        alert(error.message);
+    });
 }

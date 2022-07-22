@@ -13,7 +13,11 @@
                     <Button text="Login" backgroundColor="blue-700" @isClick="login"/>
                 </div>
                 <div class="flex justify-center text-gray-400 pb-16 md:pb-0">
-                    <p>Don't have an account? Signup for one</p>
+                    <div>
+                        <p>Don't have an account? Signup for one.</p>
+                        <!-- <p class="cursor-pointer text-blue-700 pt-2" @click="handlePasswordReset">Forgot your password? Click here to reset it.</p>
+                        <p v-if="showResetLinkText" class="text-gray-700">Reset link was sent to: <b>{{loginInfo.email}}</b></p> -->
+                    </div>
                 </div>
             </div>
             <div class="md:py-16">
@@ -57,7 +61,7 @@ import TextInput from "@/components/TextInput.vue";
 import Button from "@/components/Button.vue";
 import FormGridLabel from "@/components/FormGridLabel.vue";
 import Announcement from "@/components/Announcement.vue";
-import {registerUser, loginUser} from "@/firebase.js";
+import {registerUser, loginUser, resetPassword} from "@/firebase.js";
 export default {
     name: "Login",
     components: {
@@ -88,7 +92,8 @@ export default {
             passwordError: false,
             passwordMatchError: false,
             showAnnouncement: false,
-            announcementMessage: ""
+            announcementMessage: "",
+            showResetLinkText: false
         }
     },
     watch: {
@@ -117,13 +122,21 @@ export default {
         },
         createAccount: async function() {
             if (this.hasValidSignupInfo()) {
-                await registerUser(this.newUser.email, this.newUser.password, (this.newUser.firstName + " " + this.newUser.lastName));
-                delete this.newUser.password;
-                this.loginTheUser(this.newUser);
+                this.showAnnouncement = false;
+                const errorMessage = await registerUser(this.newUser.email, this.newUser.password, (this.newUser.firstName + " " + this.newUser.lastName));
+                if (errorMessage != "") {
+                    this.announcementMessage = errorMessage;
+                    this.showAnnouncement = true;
+                }
+                else {
+                    delete this.newUser.password;
+                    this.loginTheUser(this.newUser);
+                }
             }
         },
         handleLoginEmail: function(email) {
             this.loginInfo.email = email;
+            this.showResetLinkText = false;
         },
         handleLoginPassword: function(password) {
             this.loginInfo.password = password;
@@ -169,7 +182,7 @@ export default {
                 this.getAnnouncementMessage();
                 return false;
             }
-            else if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.newUser.email)) {
+            else if (!this.isValidEmail(this.newUser.email)) {
                 this.emailError = true;
                 this.showAnnouncement = true;
                 this.getAnnouncementMessage();
@@ -218,6 +231,25 @@ export default {
             this.$store.commit('setUser', user);
             this.$store.commit('setLoggedIn');
             this.$router.replace({name: "Home"});
+        },
+        handlePasswordReset: async function() {
+            if (this.isValidEmail(this.loginInfo.email)) {
+                this.showAnnouncement = false;
+                await resetPassword(this.loginInfo.email);
+                this.showResetLinkText = true;
+            }
+            else {
+                this.announcementMessage = "Please enter a valid email to send the reset link to.";
+                this.showAnnouncement = true;
+            }
+        },
+        isValidEmail: function(email) {
+            if (/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)) {
+                return true;
+            }
+            else {
+                return false;
+            }
         }
     },
     computed: {

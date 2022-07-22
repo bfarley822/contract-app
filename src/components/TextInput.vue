@@ -2,7 +2,7 @@
     <div>
         <input 
             :type="type" 
-            v-model="text"
+            v-model="changingText"
             :placeholder="placeholder"
             :disabled="disabled"
             :class="['h-8 border p-2 rounded', customWidth, txtSize, {'border-red-500 bg-red-50' : error}]"
@@ -40,11 +40,15 @@ export default {
         error: {
             type: Boolean,
             default: false
+        },
+        text: {
+            type: String,
+            default: ""
         }
     },
     data: function() {
         return {
-            text: ""
+            changingText: this.text
         }
     },
     methods: {
@@ -59,8 +63,8 @@ export default {
         }
     },
     watch: {
-        text: function() {
-            this.$emit('update', this.text);
+        changingText: function() {
+            this.$emit('update', this.changingText);
         }
     }
 };
