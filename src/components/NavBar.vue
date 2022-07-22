@@ -11,7 +11,7 @@
         <div class="text-white flex items-center text-lg">
             <router-link to="/">
                 <div :class="['py-1 px-4 mr-2 rounded-md hidden md:block', 
-                             selectedTab === 'home' ? 'bg-white text-gray-700' : 'hover:bg-gray-500 hover:text-gray-400']" 
+                             currTab === 'home' ? 'bg-white text-gray-700' : 'hover:bg-gray-500 hover:text-gray-400']" 
                      @click="updateSelection('home')"
                 >
                      Home
@@ -19,7 +19,7 @@
             </router-link>
             <router-link to="buy">
                 <div :class="['py-1 px-4 mr-2 rounded-md hidden md:block', 
-                             selectedTab === 'buy' ? 'bg-white text-gray-700' : 'hover:bg-gray-500 hover:text-gray-400']"
+                             currTab === 'buy' ? 'bg-white text-gray-700' : 'hover:bg-gray-500 hover:text-gray-400']"
                      @click="updateSelection('buy')"
                 >
                      Buy
@@ -27,7 +27,7 @@
             </router-link>
             <router-link to="sell">
                 <div :class="['py-1 px-4 mr-2 rounded-md hidden md:block', 
-                             selectedTab === 'sell' ? 'bg-white text-gray-700' : 'hover:bg-gray-500 hover:text-gray-400']"
+                             currTab === 'sell' ? 'bg-white text-gray-700' : 'hover:bg-gray-500 hover:text-gray-400']"
                      @click="updateSelection('sell')"
                 >
                      Sell
@@ -35,7 +35,7 @@
             </router-link>
             <router-link to="account" v-if="$store.state.isLoggedIn">
                 <div :class="['py-1 px-4 rounded-md hidden md:block', 
-                             selectedTab === 'account' ? 'bg-white text-gray-700' : 'hover:bg-gray-500 hover:text-gray-400']"
+                             currTab === 'account' ? 'bg-white text-gray-700' : 'hover:bg-gray-500 hover:text-gray-400']"
                      @click="updateSelection('account')"
                 >
                 Account
@@ -43,7 +43,7 @@
             </router-link>
             <router-link to="login" v-if="!$store.state.isLoggedIn">
                 <div :class="['py-1 px-4 rounded-md hidden md:block', 
-                             selectedTab === 'login' ? 'bg-white text-gray-700' : 'hover:bg-gray-500 hover:text-gray-400']"
+                             currTab === 'login' ? 'bg-white text-gray-700' : 'hover:bg-gray-500 hover:text-gray-400']"
                      @click="updateSelection('login')"
                 >
                      Login
@@ -64,7 +64,7 @@
                         <router-link to="/">
                             <div>
                                 <div :class="['py-1 px-4 rounded-md', 
-                                        selectedTab === 'home' ? 'bg-white text-gray-700' : 'hover:bg-gray-400 hover:text-gray-300']" 
+                                        currTab === 'home' ? 'bg-white text-gray-700' : 'hover:bg-gray-400 hover:text-gray-300']" 
                                     @click="updateSelection('home')"
                                 >
                                     Home
@@ -74,7 +74,7 @@
                         <router-link to="buy">
                             <div>
                                 <div :class="['py-1 px-4 rounded-md', 
-                                        selectedTab === 'buy' ? 'bg-white text-gray-700' : 'hover:bg-gray-400 hover:text-gray-300']"
+                                        currTab === 'buy' ? 'bg-white text-gray-700' : 'hover:bg-gray-400 hover:text-gray-300']"
                                     @click="updateSelection('buy')"
                                 >
                                     Buy
@@ -84,7 +84,7 @@
                         <router-link to="sell">
                             <div class="border-b pb-2">
                                 <div :class="['py-1 px-4 rounded-md', 
-                                            selectedTab === 'sell' ? 'bg-white text-gray-700' : 'hover:bg-gray-400 hover:text-gray-300']"
+                                            currTab === 'sell' ? 'bg-white text-gray-700' : 'hover:bg-gray-400 hover:text-gray-300']"
                                     @click="updateSelection('sell')"
                                 >
                                     Sell
@@ -94,7 +94,7 @@
                         <router-link to="account" v-if="$store.state.isLoggedIn">
                             <div>
                                 <div :class="['py-1 px-4 rounded-md', 
-                                            selectedTab === 'account' ? 'bg-white text-gray-700' : 'hover:bg-gray-400 hover:text-gray-300']"
+                                            currTab === 'account' ? 'bg-white text-gray-700' : 'hover:bg-gray-400 hover:text-gray-300']"
                                     @click="updateSelection('account')"
                                 >
                                     Account
@@ -104,7 +104,7 @@
                         <router-link to="login" v-if="!$store.state.isLoggedIn">
                             <div>
                                 <div :class="['py-1 px-4 rounded-md', 
-                                            selectedTab === 'login' ? 'bg-white text-gray-700' : 'hover:bg-gray-400 hover:text-gray-300']"
+                                            currTab === 'login' ? 'bg-white text-gray-700' : 'hover:bg-gray-400 hover:text-gray-300']"
                                     @click="updateSelection('login')"
                                 >
                                     Login
@@ -127,24 +127,25 @@ export default {
     },  
     data: function() {
         return {
-            isShown: false,
-            selectedTab: 'home',
+            isShown: false
         }
     },
     methods: {
         updateSelection: function(selection) {
             this.isShown = false;
-            this.selectedTab = selection;
+            this.$store.commit('setCurrTab', selection);
         },
         toggle: function() {
             this.isShown = !this.isShown;
         },
     },
     computed: {
-        
+        currTab: function() {
+            return this.$store.state.currTab;
+        }
     },
     created: function() {
-        this.$router.replace({path: '/'})
+        this.$router.replace({path: '/'});
     }
 };
 </script>

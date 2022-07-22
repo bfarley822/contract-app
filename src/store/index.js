@@ -6,7 +6,8 @@ export default createStore({
     },
     state: {
         user: {},
-        isLoggedIn: false
+        isLoggedIn: false,
+        currTab: "home"
     },
     mutations: {
         setUser (state, user) {
@@ -14,6 +15,9 @@ export default createStore({
         },
         setLoggedIn (state) {
             state.isLoggedIn = true;
+        },
+        setCurrTab (state, tab) {
+            state.currTab = tab;
         }
     },
     actions: {

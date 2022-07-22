@@ -230,7 +230,8 @@ export default {
         loginTheUser: function(user) {
             this.$store.commit('setUser', user);
             this.$store.commit('setLoggedIn');
-            this.$router.replace({name: "Home"});
+            this.$store.commit('setCurrTab', 'account');
+            this.$router.replace({name: "Account"});
         },
         handlePasswordReset: async function() {
             if (this.isValidEmail(this.loginInfo.email)) {
