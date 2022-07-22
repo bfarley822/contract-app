@@ -25,9 +25,9 @@ export const getUser = async id => {
     return user.exists ? user.data() : null;
 }
 
-export const updateUser = (id, user) => {
-    return usersCollection.doc(id).update(user);
-}
+// export const updateUser = (id, user) => {
+//     return usersCollection.doc(id).update(user);
+// }
 
 export const deleteUser = id => {
     return usersCollection.doc(id).delete();
@@ -80,6 +80,20 @@ export const resetPassword = async (email) => {
     await firebase.auth().sendPasswordResetEmail(email.toString()).then(() => {
         
     }).catch(error => {
+        alert(error.message);
+    });
+}
+
+export const updateUser = async (user) => {
+    const currUser = firebase.auth().currentUser;
+    await currUser.updateProfile({
+        displayName: user.firstName + " " + user.lastName,
+        email: user.email,
+        phoneNumber: user.phoneNumber,
+        photoURL: user.photoURL
+    }).then(() => {
+
+    }).catch((error) => {
         alert(error.message);
     });
 }

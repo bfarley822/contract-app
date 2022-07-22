@@ -50,7 +50,8 @@
                 </div>
             </router-link>
             <div v-if="$store.state.isLoggedIn" class="pl-2 hidden md:block">
-                <img class="object-cover w-9 h-9 rounded-full" :src="require(`@/assets/contract-handshake.jpg`)">
+                <img v-if="userPicture" class="object-cover w-9 h-9 rounded-full" :src="require(`@/assets/${userPicture}`)">
+                <img v-else class="object-cover w-9 h-9 rounded-full" :src="require(`@/assets/contract-handshake.jpg`)">
             </div>
 
 
@@ -142,6 +143,9 @@ export default {
     computed: {
         currTab: function() {
             return this.$store.state.currTab;
+        },
+        userPicture: function() {
+            return this.$store.state.user.photoURL;
         }
     },
     created: function() {

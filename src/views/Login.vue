@@ -148,7 +148,8 @@ export default {
                     firstName: data.displayName.substr(0, data.displayName.indexOf(' ')),
                     lastName: data.displayName.substr(data.displayName.indexOf(' ') + 1, data.displayName.length - 1),
                     email: data.email,
-                    phoneNumber: data.phoneNumber
+                    phoneNumber: data.phoneNumber,
+                    photoURL: data.photoURL
                 }
                 this.loginTheUser(user);
             } 

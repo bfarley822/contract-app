@@ -3,7 +3,7 @@
     <div class="grid md:grid-cols-2 gap-4 md:gap-8 border-b">
       <div class="grid justify-items-center md:justify-self-end">
         <p class="text-2xl flex justify-center md:justify-end pb-4 md:mr-1 md:hidden">Account Details</p>
-        <img v-if="image !== ''" class="object-cover w-80 h-80" :src="require(`@/assets/${image}`)">
+        <img v-if="image" class="object-cover w-80 h-80" :src="require(`@/assets/${image}`)">
         <div v-else :class="['object-cover w-80 h-80 border grid place-content-center', allDisabled ? 'bg-[#F6F7F7]' : 'bg-white']">
           <p class="text-gray-300">No profile picture</p>
         </div>
@@ -16,13 +16,13 @@
         </div>
         <div class="grid gri-cols-2 gap-2 items-center formGridStyle">
           <FormGridLabel text="First Name"/>
-          <TextInput :disabled="allDisabled" :text="user.firstName"/>
+          <TextInput :disabled="allDisabled" :text="firstName" @update="handleFirstName"/>
           <FormGridLabel text="Last Name"/>
-          <TextInput :disabled="allDisabled" :text="user.lastName"/>
-          <FormGridLabel text="Email"/>
-          <TextInput :disabled="allDisabled" :text="user.email"/>
+          <TextInput :disabled="allDisabled" :text="lastName" @update="handleLastName"/>
           <FormGridLabel text="Phone Number"/>
-          <TextInput :disabled="allDisabled" :text="user.phoneNumber"/>
+          <TextInput :disabled="true" :text="phoneNumber" @update="handlePhoneNumber"/>
+          <FormGridLabel text="Email"/>
+          <TextInput type="email" :disabled="true" :text="email" @update="handleEmail"/>
         </div>
         <Button :text="buttonText" backgroundColor="blue-700" class="flex justify-center md:justify-end py-8 md:mr-6" @isClick="handleUpdateDetails"/>
       </div>
@@ -69,7 +69,7 @@ import FormGridLabel from "@/components/FormGridLabel.vue";
 import TextInput from "@/components/TextInput.vue";
 import Button from "@/components/Button.vue";
 import ListingCard from "@/components/ListingCard.vue";
-//import { updateUser } from '@/firebase';
+import {updateUser} from "@/firebase.js";
 export default {
     name: "Account",
     components: {
@@ -85,15 +85,42 @@ export default {
         return {
             image: "",
             allDisabled: true,
-            listings: []
+            listings: [],
+            firstName: "",
+            lastName: "",
+            phoneNumber: "",
+            email: ""
         }
     },
     methods: {
         handleImage: function(event) {
           this.image = event.target.files[0].name;
         },
-        handleUpdateDetails: function() {
+        handleUpdateDetails: async function() {
+          if (!this.allDisabled) {
+            const user = {
+              firstName: this.firstName,
+              lastName: this.lastName,
+              email: this.email,
+              phoneNumber: this.phoneNumber,
+              photoURL: this.image
+            }
+            await updateUser(user);
+            this.$store.commit('setUser', user);
+          }
           this.allDisabled = !this.allDisabled;
+        },
+        handleFirstName: function(value) {
+          this.firstName = value;
+        },
+        handleLastName: function(value) {
+          this.lastName = value;
+        },
+        handlePhoneNumber: function(value) {
+          this.phoneNumber = value;
+        },
+        handleEmail: function(value) {
+          this.email = value;
         }
     },
     computed: {
@@ -105,6 +132,11 @@ export default {
         }
     },
     created: function() {
+      this.firstName = this.user.firstName;
+      this.lastName = this.user.lastName;
+      this.phoneNumber = this.user.phoneNumber;
+      this.email = this.user.email;
+      this.image = this.user.photoURL;
       
         this.listings = [
             {
