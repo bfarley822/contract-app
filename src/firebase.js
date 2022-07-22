@@ -45,13 +45,11 @@ export const registerUser = (email, password, name) => {
 }
 
 export const loginUser = async (email, password) => {
-    firebase.auth().signInWithEmailAndPassword(email, password).then(() => {
-        const user = firebase.auth().currentUser;
-        user.updateProfile({
-            displayName: "Brady Farley"
-        });
+    let user  = {};
+    let errMsg = "";
+    await firebase.auth().signInWithEmailAndPassword(email, password).then(() => {
+        user = firebase.auth().currentUser;
     }).catch(error => {
-        let errMsg = "";
         switch (error.code) {
             case 'auth/invalid-email':
                 errMsg = 'Invalid email'
@@ -66,6 +64,7 @@ export const loginUser = async (email, password) => {
                 errMsg = 'Email or password was incorrect'
                 break
         }
-        alert(errMsg);
+        return errMsg;
     });
+    return errMsg != "" ? errMsg : user;
 }

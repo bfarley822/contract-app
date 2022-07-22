@@ -5,7 +5,7 @@
             v-model="text"
             :placeholder="placeholder"
             :disabled="disabled"
-            :class="['h-8 border p-2 rounded', customWidth, txtSize]"
+            :class="['h-8 border p-2 rounded', customWidth, txtSize, {'border-red-500 bg-red-50' : error}]"
         />
     </div>
 </template>
@@ -36,6 +36,10 @@ export default {
         type: {
             type: String,
             default: "text"
+        },
+        error: {
+            type: Boolean,
+            default: false
         }
     },
     data: function() {
