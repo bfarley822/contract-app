@@ -93,22 +93,22 @@ export default {
             lastName: "",
             phoneNumber: "",
             email: "",
-            isLoading: true
+            isLoading: false
         }
     },
     methods: {
         handleImage: async function(event) {
-          this.isLoading = true;
-          const image = event.target.files[0];
-          this.imageURL = await uploadImage(image);
-          this.updateUserDetails();
-          this.isLoading = false;
+          if (event.target.files.length > 0) {
+            this.isLoading = true;
+            const image = event.target.files[0];
+            this.imageURL = await uploadImage(image);
+            this.updateUserDetails();
+          }
         },
         handleUpdateDetails: function() {
           if (!this.allDisabled) {
             this.isLoading = true;
             this.updateUserDetails();
-            this.isLoading = false;
           }
           this.allDisabled = !this.allDisabled;
         },
@@ -134,6 +134,7 @@ export default {
           }
           await updateUser(user);
           this.$store.commit('setUser', user);
+          this.isLoading = false;
         }
     },
     computed: {

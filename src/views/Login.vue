@@ -53,6 +53,7 @@
             :message="announcementMessage" 
             @close="showAnnouncement = false"
         />
+        <LoadingIcon v-if="isLoading"/>
     </div>
 </template>
 
@@ -61,6 +62,7 @@ import TextInput from "@/components/TextInput.vue";
 import Button from "@/components/Button.vue";
 import FormGridLabel from "@/components/FormGridLabel.vue";
 import Announcement from "@/components/Announcement.vue";
+import LoadingIcon from "@/components/LoadingIcon.vue";
 import {registerUser, loginUser, resetPassword} from "@/firebase.js";
 export default {
     name: "Login",
@@ -68,7 +70,8 @@ export default {
         TextInput,
         Button,
         FormGridLabel,
-        Announcement
+        Announcement,
+        LoadingIcon
     },  
     props: {
         
@@ -93,7 +96,8 @@ export default {
             passwordMatchError: false,
             showAnnouncement: false,
             announcementMessage: "",
-            showResetLinkText: false
+            showResetLinkText: false,
+            isLoading: false
         }
     },
     watch: {
@@ -122,11 +126,13 @@ export default {
         },
         createAccount: async function() {
             if (this.hasValidSignupInfo()) {
+                this.isLoading = true;
                 this.showAnnouncement = false;
                 const errorMessage = await registerUser(this.newUser.email, this.newUser.password, (this.newUser.firstName + " " + this.newUser.lastName));
                 if (errorMessage != "") {
                     this.announcementMessage = errorMessage;
                     this.showAnnouncement = true;
+                    this.isLoading = false;
                 }
                 else {
                     delete this.newUser.password;
@@ -142,6 +148,7 @@ export default {
             this.loginInfo.password = password;
         },
         login: async function() {
+            this.isLoading = true;
             const data = await loginUser(this.loginInfo.email, this.loginInfo.password);
             if (data.displayName) {
                 const user = {
@@ -162,6 +169,8 @@ export default {
                 this.emailError = false;
                 this.passwordError = false;
                 this.passwordMatchError = false;
+
+                this.isLoading = false;
             }
         },
         hasValidSignupInfo: function() {
@@ -232,6 +241,7 @@ export default {
             this.$store.commit('setUser', user);
             this.$store.commit('setLoggedIn');
             this.$store.commit('setCurrTab', 'account');
+            this.isLoading = false;
             this.$router.replace({name: "Account"});
         },
         handlePasswordReset: async function() {
