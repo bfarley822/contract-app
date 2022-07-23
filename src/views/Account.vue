@@ -3,12 +3,12 @@
     <div class="grid md:grid-cols-2 gap-4 md:gap-8 border-b">
       <div class="grid justify-items-center md:justify-self-end">
         <p class="text-2xl flex justify-center md:justify-end pb-4 md:mr-1 md:hidden">Account Details</p>
-        <img v-if="image" class="object-cover w-80 h-80" :src="require(`@/assets/${image}`)">
-        <div v-else :class="['object-cover w-80 h-80 border grid place-content-center', allDisabled ? 'bg-[#F6F7F7]' : 'bg-white']">
+        <img v-if="userImage" class="object-cover w-80 h-80" :src="userImage">
+        <div v-else :class="['object-cover w-80 h-80 border grid place-content-center', 'bg-[#F6F7F7]']">
           <p class="text-gray-300">No profile picture</p>
         </div>
         <input type="file" name="file" id="file" accept="image/png, image/jpeg" @change="handleImage" class="hidden"/>
-        <label for="file" :class="['md:mb-8 cursor-pointer border border-gray-300 rounded py-1 px-4 text-lg bg-gray-200 text-gray-700 hover:opacity-80 mt-4', {'invisible' : allDisabled}]">Upload Picture</label>
+        <label for="file" :class="['md:mb-8 cursor-pointer border border-gray-300 rounded py-1 px-4 text-lg bg-gray-200 text-gray-700 hover:opacity-80 mt-4']">Change Picture</label>
       </div>
       <div class="flex flex-col justify-between md:justify-self-start">
         <div class="hidden md:block">
@@ -69,7 +69,7 @@ import FormGridLabel from "@/components/FormGridLabel.vue";
 import TextInput from "@/components/TextInput.vue";
 import Button from "@/components/Button.vue";
 import ListingCard from "@/components/ListingCard.vue";
-import {updateUser} from "@/firebase.js";
+import {updateUser, uploadImage} from "@/firebase.js";
 export default {
     name: "Account",
     components: {
@@ -83,7 +83,7 @@ export default {
     },
     data: function() {
         return {
-            image: "",
+            imageURL: "",
             allDisabled: true,
             listings: [],
             firstName: "",
@@ -93,20 +93,14 @@ export default {
         }
     },
     methods: {
-        handleImage: function(event) {
-          this.image = event.target.files[0].name;
+        handleImage: async function(event) {
+          const image = event.target.files[0];
+          this.imageURL = await uploadImage(image);
+          this.updateUserDetails();
         },
-        handleUpdateDetails: async function() {
+        handleUpdateDetails: function() {
           if (!this.allDisabled) {
-            const user = {
-              firstName: this.firstName,
-              lastName: this.lastName,
-              email: this.email,
-              phoneNumber: this.phoneNumber,
-              photoURL: this.image
-            }
-            await updateUser(user);
-            this.$store.commit('setUser', user);
+            this.updateUserDetails();
           }
           this.allDisabled = !this.allDisabled;
         },
@@ -121,6 +115,17 @@ export default {
         },
         handleEmail: function(value) {
           this.email = value;
+        },
+        updateUserDetails: async function() {
+          const user = {
+            firstName: this.firstName,
+            lastName: this.lastName,
+            email: this.email,
+            phoneNumber: this.phoneNumber,
+            photoURL: this.imageURL
+          }
+          await updateUser(user);
+          this.$store.commit('setUser', user);
         }
     },
     computed: {
@@ -129,14 +134,17 @@ export default {
         },
         user: function() {
           return this.$store.state.user;
+        },
+        userImage: function() {
+          return this.user.photoURL;
         }
-    },
+    }, 
     created: function() {
       this.firstName = this.user.firstName;
       this.lastName = this.user.lastName;
       this.phoneNumber = this.user.phoneNumber;
       this.email = this.user.email;
-      this.image = this.user.photoURL;
+      this.imageURL = this.user.photoURL;
       
         this.listings = [
             {

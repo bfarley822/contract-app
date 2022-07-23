@@ -97,3 +97,14 @@ export const updateUser = async (user) => {
         alert(error.message);
     });
 }
+
+export const uploadImage = async (image) => {
+    let pictureUrl = null;
+    const storageRef = await firebase.storage().ref(`profilePics/${image.name}`).put(image);
+    await storageRef.ref.getDownloadURL().then((url) => {
+        pictureUrl = url;
+    }).catch((error) => {
+        alert(error.message);
+    });
+    return pictureUrl;
+}
