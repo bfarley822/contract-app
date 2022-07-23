@@ -9,6 +9,7 @@
         </div>
         <input type="file" name="file" id="file" accept="image/png, image/jpeg" @change="handleImage" class="hidden"/>
         <label for="file" :class="['md:mb-8 cursor-pointer border border-gray-300 rounded py-1 px-4 text-lg bg-gray-200 text-gray-700 hover:opacity-80 mt-4']">Change Picture</label>
+        <LoadingIcon v-if="isLoading"/>
       </div>
       <div class="flex flex-col justify-between md:justify-self-start">
         <div class="hidden md:block">
@@ -69,15 +70,17 @@ import FormGridLabel from "@/components/FormGridLabel.vue";
 import TextInput from "@/components/TextInput.vue";
 import Button from "@/components/Button.vue";
 import ListingCard from "@/components/ListingCard.vue";
+import LoadingIcon from "@/components/LoadingIcon.vue";
 import {updateUser, uploadImage} from "@/firebase.js";
 export default {
     name: "Account",
     components: {
-        FormGridLabel,
-        TextInput,
-        Button,
-        ListingCard
-    },  
+      FormGridLabel,
+      TextInput,
+      Button,
+      ListingCard,
+      LoadingIcon
+},  
     props: {
         
     },
@@ -89,18 +92,23 @@ export default {
             firstName: "",
             lastName: "",
             phoneNumber: "",
-            email: ""
+            email: "",
+            isLoading: true
         }
     },
     methods: {
         handleImage: async function(event) {
+          this.isLoading = true;
           const image = event.target.files[0];
           this.imageURL = await uploadImage(image);
           this.updateUserDetails();
+          this.isLoading = false;
         },
         handleUpdateDetails: function() {
           if (!this.allDisabled) {
+            this.isLoading = true;
             this.updateUserDetails();
+            this.isLoading = false;
           }
           this.allDisabled = !this.allDisabled;
         },
