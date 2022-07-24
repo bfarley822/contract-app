@@ -36,10 +36,20 @@
                 :numOfBaths="listing.bathrooms"
                 :roomType="listing.roomType"
                 :image="listing.images[0]"
+                :isHearted="isHearted"
                 class="w-80 md:w-96"
-                @click="handleListingClick(listing)"/>
+                @isClick="handleListingClick(listing)"
+                @updateHeart="handleHeartClick"/>
         </template>
     </div>
+
+    <Announcement 
+        v-if="showAnnouncement" 
+        :message="announcementMessage" 
+        @close="showAnnouncement = false"
+    />
+
+    <LoadingIcon v-if="isLoading"/>
   </div>
 </template>
 
@@ -48,6 +58,8 @@ import SearchBar from "@/components/SearchBar.vue";
 import ListingCard from "@/components/ListingCard.vue";
 import Dropdown from "@/components/Dropdown.vue";
 import Popup from "@/components/Popup.vue";
+import LoadingIcon from "@/components/LoadingIcon.vue";
+import Announcement from "@/components/Announcement.vue";
 import {getAllListings} from "@/firebase.js";
 export default {
     name: "Buy",
@@ -55,7 +67,9 @@ export default {
         SearchBar,
         ListingCard,
         Dropdown,
-        Popup
+        Popup,
+        LoadingIcon,
+        Announcement
     },  
     data: function() {
         return {
@@ -64,7 +78,11 @@ export default {
             roomType: "both",
             listings: [],
             showListingPopup: false,
-            selectedListing: {}
+            selectedListing: {},
+            isLoading: false,
+            showAnnouncement: false,
+            announcementMessage: "",
+            isHearted: false
         }
     },
     methods: {
@@ -116,13 +134,25 @@ export default {
         handleListingClick: function(listing) {
             this.showListingPopup = true;
             this.selectedListing = listing;
+        },
+        handleHeartClick: function() {
+            if (this.$store.state.isLoggedIn) {
+                this.isHearted = !this.isHearted;
+            }
+            else {
+                this.announcementMessage = "You must be logged in to save a listing";
+                this.showAnnouncement = true;
+            }
         }
     },
     computed: {
         filteredListings: function() {
+            /* eslint-disable */
+            this.isLoading = true;
             var updatedListings = this.listingsBySearchInput();
             updatedListings = this.listingsByRoomType(updatedListings);
             updatedListings = this.listingsByFilter(updatedListings);
+            this.isLoading = false;
             return updatedListings;
         },
         filterOptions: function() {
@@ -167,8 +197,10 @@ export default {
         }
     },
     created: async function() {
+        this.isLoading = true;
         const initialListings = await getAllListings();
         this.listings = initialListings.sort((a,b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0));
+        this.isLoading = false;
     }
 };
 </script>

@@ -51,7 +51,6 @@
             </router-link>
             <div v-if="$store.state.isLoggedIn" class="pl-2 hidden md:block">
                 <img v-if="userPicture" class="object-cover w-9 h-9 rounded-full" :src="userPicture">
-                <img v-else class="object-cover w-9 h-9 rounded-full bg-gray-200">
             </div>
 
 
@@ -150,6 +149,7 @@ export default {
     },
     created: function() {
         this.$router.replace({path: '/'});
+        this.$store.commit('setCurrTab', "home");
     }
 };
 </script>

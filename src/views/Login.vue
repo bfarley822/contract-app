@@ -128,7 +128,7 @@ export default {
             if (this.hasValidSignupInfo()) {
                 this.isLoading = true;
                 this.showAnnouncement = false;
-                const errorMessage = await registerUser(this.newUser.email, this.newUser.password, (this.newUser.firstName + " " + this.newUser.lastName));
+                const errorMessage = await registerUser(this.newUser.email, this.newUser.password, this.newUser.firstName, this.newUser.lastName);
                 if (errorMessage != "") {
                     this.announcementMessage = errorMessage;
                     this.showAnnouncement = true;

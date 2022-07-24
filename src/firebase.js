@@ -15,6 +15,7 @@ const firebaseApp = firebase.initializeApp(config);
 
 const db = firebaseApp.firestore();
 const listingsCollection = db.collection('listings');
+const usersCollection = db.collection('users');
 
 export const createListing = listing => {
     return listingsCollection.add(listing);
@@ -31,26 +32,34 @@ export const getAllListings = async () => {
     });
 }
 
-export const updateListing = (id, listing) => {
-    return listingsCollection.doc(id).update(listing);
-}
+// export const updateListing = (id, listing) => {
+//     return listingsCollection.doc(id).update(listing);
+// }
 
-export const deleteListing = id => {
-    return listingsCollection.doc(id).delete();
-}
+// export const deleteListing = id => {
+//     return listingsCollection.doc(id).delete();
+// }
 
-export const registerUser = async (email, password, name) => {
+export const registerUser = async (email, password, firstName, lastName) => {
     let errMsg = "";
     await firebase.auth().createUserWithEmailAndPassword(email, password).then(() => {
         const user = firebase.auth().currentUser;
         user.updateProfile({
-            displayName: name
+            displayName: firstName + " " + lastName
         });
         // user.sendEmailVerification().then(() => {
         //     alert("verification email sent")
         // }).catch(error => {
         //     alert(error);
         // });
+        const firstoreUser = {
+            email: email,
+            firstName: firstName,
+            lastName: lastName,
+            myListings: [],
+            savedListings: []
+        }
+        usersCollection.add(firstoreUser);
     }).catch(error => {
         errMsg = error.message;
     });
