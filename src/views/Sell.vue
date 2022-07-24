@@ -100,7 +100,8 @@ export default {
             priceError: false,
             bedroomError: false,
             bathroomError: false,
-            imageError: false
+            imageError: false,
+            files: []
         }
     },
     methods: {
@@ -140,7 +141,7 @@ export default {
           if (this.stateError) {
             this.showAnnouncement = false;
           }
-          this.state = false;
+          this.stateError = false;
         },
         handleCity: function(value) {
           this.city = value;
@@ -166,6 +167,7 @@ export default {
               this.showAnnouncement = false;
             }
             this.images = [];
+            this.files = [];
             for (const file of files) {
               let reader = new FileReader;
               reader.onload = e => {
@@ -173,6 +175,7 @@ export default {
               }
               reader.readAsDataURL(file)
             }
+            this.files = files;
           }
         },
         handleListingSubmit: async function() {
@@ -180,7 +183,7 @@ export default {
             if (this.hasValidInput()) {
               this.isLoading = true;
               let imageURLs = [];
-              for (const image of this.images) {
+              for (const image of this.files) {
                 const url = await uploadImage(image);
                 imageURLs.push(url);
               }

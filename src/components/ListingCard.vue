@@ -1,7 +1,7 @@
 <template>
     <div :class="['h-64 shadow-md rounded-lg cursor-pointer', {'hover:shadow-xl transition-shadow duration-300 ease-in-out' : !onHeart}]">
         <div class="relative">
-            <img class="object-cover w-full h-40 bg-gray-400 rounded-t-lg" :src="require(`@/assets/${image}`)">
+            <img v-if="image != ''" class="object-cover w-full h-40 bg-gray-400 rounded-t-lg" :src="image">
             <i :class="['fa-solid fa-heart absolute top-2 right-2 text-4xl cursor-pointer', 
                         isHearted ? 'text-red-400' : 'text-gray-200 hover:text-gray-300']" 
                 @mouseenter="onHeart = true" 
@@ -39,7 +39,7 @@ export default {
         image: {
            type: String,
            required: true,
-           default: "fake-house.jpg"
+           default: ""
         },
         numOfBeds: {
             type: String,

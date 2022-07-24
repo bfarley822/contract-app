@@ -155,44 +155,44 @@ export default {
       this.email = this.user.email;
       this.imageURL = this.user.photoURL;
       
-        this.listings = [
-            {
-                id: "0",
-                address: "240 E 600 N Apt. 2 Provo, UT 84606",
-                price: "780",
-                bedrooms: "2",
-                bathrooms: "1",
-                roomType: "Shared",
-                image: "contract-handshake.jpg"
-            },
-            {
-                id: "1",
-                address: "240 N 600 E Apt. 4 Provo, UT 84606",
-                price: "1,000",
-                bedrooms: "3",
-                bathrooms: "1.5",
-                roomType: "Private",
-                image: "fake-house.jpg"
-            },
-            {
-                id: "2",
-                address: "240 E 600 N Apt. 2 Provo, UT 84606",
-                price: "780",
-                bedrooms: "2",
-                bathrooms: "1",
-                roomType: "Shared",
-                image: "contract-handshake.jpg"
-            },
-            {
-                id: "3",
-                address: "240 N 600 E Apt. 4 Provo, UT 84606",
-                price: "1,000",
-                bedrooms: "3",
-                bathrooms: "1.5",
-                roomType: "Private",
-                image: "fake-house.jpg"
-            }
-        ]
+        // this.listings = [
+        //     {
+        //         id: "0",
+        //         address: "240 E 600 N Apt. 2 Provo, UT 84606",
+        //         price: "780",
+        //         bedrooms: "2",
+        //         bathrooms: "1",
+        //         roomType: "Shared",
+        //         image: "contract-handshake.jpg"
+        //     },
+        //     {
+        //         id: "1",
+        //         address: "240 N 600 E Apt. 4 Provo, UT 84606",
+        //         price: "1,000",
+        //         bedrooms: "3",
+        //         bathrooms: "1.5",
+        //         roomType: "Private",
+        //         image: "fake-house.jpg"
+        //     },
+        //     {
+        //         id: "2",
+        //         address: "240 E 600 N Apt. 2 Provo, UT 84606",
+        //         price: "780",
+        //         bedrooms: "2",
+        //         bathrooms: "1",
+        //         roomType: "Shared",
+        //         image: "contract-handshake.jpg"
+        //     },
+        //     {
+        //         id: "3",
+        //         address: "240 N 600 E Apt. 4 Provo, UT 84606",
+        //         price: "1,000",
+        //         bedrooms: "3",
+        //         bathrooms: "1.5",
+        //         roomType: "Private",
+        //         image: "fake-house.jpg"
+        //     }
+        // ]
     }
 };
 </script>

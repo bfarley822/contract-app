@@ -24,6 +24,12 @@ export const getListing = async id => {
     const listing = await listingsCollection.doc(id).get();
     return listing.exists ? listing.data() : null;
 }
+export const getAllListings = async () => {
+    const listings = await listingsCollection.get();
+    return listings.docs.map(listing => {
+        return {id: listing.id, ...listing.data()}
+    });
+}
 
 export const updateListing = (id, listing) => {
     return listingsCollection.doc(id).update(listing);
