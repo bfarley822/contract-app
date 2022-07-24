@@ -18,7 +18,7 @@
             />
             <Popup
                 v-show="showListingPopup"
-                :popupTitle="selectedListing.address"
+                :popupTitle="selectedListing.address ?? ''"
                 @close="showListingPopup = false"
             >
                 <div>

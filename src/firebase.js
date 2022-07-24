@@ -14,23 +14,23 @@ const config = {
 const firebaseApp = firebase.initializeApp(config);
 
 const db = firebaseApp.firestore();
-const usersCollection = db.collection('users');
+const listingsCollection = db.collection('listings');
 
-export const createUser = user => {
-    return usersCollection.add(user);
+export const createListing = listing => {
+    return listingsCollection.add(listing);
 }
 
-export const getUser = async id => {
-    const user = await usersCollection.doc(id).get();
-    return user.exists ? user.data() : null;
+export const getListing = async id => {
+    const listing = await listingsCollection.doc(id).get();
+    return listing.exists ? listing.data() : null;
 }
 
-// export const updateUser = (id, user) => {
-//     return usersCollection.doc(id).update(user);
-// }
+export const updateListing = (id, listing) => {
+    return listingsCollection.doc(id).update(listing);
+}
 
-export const deleteUser = id => {
-    return usersCollection.doc(id).delete();
+export const deleteListing = id => {
+    return listingsCollection.doc(id).delete();
 }
 
 export const registerUser = async (email, password, name) => {
@@ -98,9 +98,20 @@ export const updateUser = async (user) => {
     });
 }
 
-export const uploadImage = async (image) => {
+export const uploadProfilePic = async (image) => {
     let pictureUrl = null;
     const storageRef = await firebase.storage().ref(`profilePics/${image.name}`).put(image);
+    await storageRef.ref.getDownloadURL().then((url) => {
+        pictureUrl = url;
+    }).catch((error) => {
+        alert(error.message);
+    });
+    return pictureUrl;
+}
+
+export const uploadImage = async (image) => {
+    let pictureUrl = null;
+    const storageRef = await firebase.storage().ref(`images/${image.name}`).put(image);
     await storageRef.ref.getDownloadURL().then((url) => {
         pictureUrl = url;
     }).catch((error) => {

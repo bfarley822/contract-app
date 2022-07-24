@@ -8,7 +8,7 @@
             :max="max"
             @input="handleInput"
             :placeholder="placeholder"
-            :class="['h-8 border p-2 rounded', customWidth, txtSize]"
+            :class="['h-8 border p-2 rounded', customWidth, txtSize, {'border-red-500 bg-red-50' : error}]"
         />
     </div>
 </template>
@@ -42,7 +42,11 @@ export default {
         max: {
             type: String,
             default: ""
-        }
+        },
+        error: {
+            type: Boolean,
+            default: false
+        },
     },
     data: function() {
         return {

@@ -71,7 +71,7 @@ import TextInput from "@/components/TextInput.vue";
 import Button from "@/components/Button.vue";
 import ListingCard from "@/components/ListingCard.vue";
 import LoadingIcon from "@/components/LoadingIcon.vue";
-import {updateUser, uploadImage} from "@/firebase.js";
+import {updateUser, uploadProfilePic} from "@/firebase.js";
 export default {
     name: "Account",
     components: {
@@ -101,7 +101,7 @@ export default {
           if (event.target.files.length > 0) {
             this.isLoading = true;
             const image = event.target.files[0];
-            this.imageURL = await uploadImage(image);
+            this.imageURL = await uploadProfilePic(image);
             this.updateUserDetails();
           }
         },
