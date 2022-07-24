@@ -32,14 +32,14 @@
       <p class="text-2xl pt-4 pb-8 md:pt-8">My Listings</p>
       <div class="flex items-center overflow-x-auto">
         <div class="flex flex-nowrap pb-4">
-          <template v-for="listing in listings" :key="listing.id">
+          <template v-for="listing in myListings" :key="listing.id">
             <ListingCard 
                 :address="listing.address"
                 :dollarsPerMonth="listing.price" 
                 :numOfBeds="listing.bedrooms"
                 :numOfBaths="listing.bathrooms"
                 :roomType="listing.roomType"
-                :image="listing.image"
+                :image="listing.images[0]"
                 class="mr-4 w-72 md:w-96"/>
         </template>
         </div>
@@ -49,14 +49,14 @@
       <p class="text-2xl pt-4 pb-8 md:pt-8">Saved Listings</p>
       <div class="flex items-center overflow-x-auto">
         <div class="flex flex-nowrap pb-4">
-          <template v-for="listing in listings" :key="listing.id">
+          <template v-for="listing in savedListings" :key="listing.id">
             <ListingCard 
                 :address="listing.address"
                 :dollarsPerMonth="listing.price" 
                 :numOfBeds="listing.bedrooms"
                 :numOfBaths="listing.bathrooms"
                 :roomType="listing.roomType"
-                :image="listing.image"
+                :image="listing.images[0]"
                 class="mr-4 w-72 md:w-96"/>
         </template>
         </div>
@@ -71,7 +71,7 @@ import TextInput from "@/components/TextInput.vue";
 import Button from "@/components/Button.vue";
 import ListingCard from "@/components/ListingCard.vue";
 import LoadingIcon from "@/components/LoadingIcon.vue";
-import {updateUser, uploadProfilePic} from "@/firebase.js";
+import {updateAuthUser, uploadProfilePic, getAllMyListings, getAllSavedListings} from "@/firebase.js";
 export default {
     name: "Account",
     components: {
@@ -93,7 +93,9 @@ export default {
             lastName: "",
             phoneNumber: "",
             email: "",
-            isLoading: false
+            isLoading: false,
+            myListings: [],
+            savedListings: []
         }
     },
     methods: {
@@ -132,7 +134,7 @@ export default {
             phoneNumber: this.phoneNumber,
             photoURL: this.imageURL
           }
-          await updateUser(user);
+          await updateAuthUser(user);
           this.$store.commit('setUser', user);
           this.isLoading = false;
         }
@@ -148,51 +150,15 @@ export default {
           return this.user.photoURL;
         }
     }, 
-    created: function() {
+    created: async function() {
       this.firstName = this.user.firstName;
       this.lastName = this.user.lastName;
       this.phoneNumber = this.user.phoneNumber;
       this.email = this.user.email;
       this.imageURL = this.user.photoURL;
       
-        // this.listings = [
-        //     {
-        //         id: "0",
-        //         address: "240 E 600 N Apt. 2 Provo, UT 84606",
-        //         price: "780",
-        //         bedrooms: "2",
-        //         bathrooms: "1",
-        //         roomType: "Shared",
-        //         image: "contract-handshake.jpg"
-        //     },
-        //     {
-        //         id: "1",
-        //         address: "240 N 600 E Apt. 4 Provo, UT 84606",
-        //         price: "1,000",
-        //         bedrooms: "3",
-        //         bathrooms: "1.5",
-        //         roomType: "Private",
-        //         image: "fake-house.jpg"
-        //     },
-        //     {
-        //         id: "2",
-        //         address: "240 E 600 N Apt. 2 Provo, UT 84606",
-        //         price: "780",
-        //         bedrooms: "2",
-        //         bathrooms: "1",
-        //         roomType: "Shared",
-        //         image: "contract-handshake.jpg"
-        //     },
-        //     {
-        //         id: "3",
-        //         address: "240 N 600 E Apt. 4 Provo, UT 84606",
-        //         price: "1,000",
-        //         bedrooms: "3",
-        //         bathrooms: "1.5",
-        //         roomType: "Private",
-        //         image: "fake-house.jpg"
-        //     }
-        // ]
+      this.myListings = await getAllMyListings(this.$store.state.userID);
+      this.savedListings = await getAllSavedListings(this.$store.state.userID);
     }
 };
 </script>

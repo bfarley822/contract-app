@@ -25,6 +25,7 @@ export const getListing = async id => {
     const listing = await listingsCollection.doc(id).get();
     return listing.exists ? listing.data() : null;
 }
+
 export const getAllListings = async () => {
     const listings = await listingsCollection.get();
     return listings.docs.map(listing => {
@@ -39,6 +40,56 @@ export const getAllListings = async () => {
 // export const deleteListing = id => {
 //     return listingsCollection.doc(id).delete();
 // }
+
+
+export const addListingToMyListings = async (userID, listingID) => {
+    const currUser = await usersCollection.doc(userID).get();
+    let currUserListings = currUser.data().myListings;
+    currUserListings.push(listingID);
+    await usersCollection.doc(userID).update({
+        myListings: currUserListings
+    });
+}
+
+export const getAllMyListings = async (userID) => {
+    const currUser = await usersCollection.doc(userID).get();
+    let currUserListingIDs = currUser.data().myListings;
+    let userListings = [];
+    for (const ID of currUserListingIDs) {
+        const listing = await listingsCollection.doc(ID).get();
+        userListings.push(listing.data());
+    }
+    return userListings;
+}
+
+export const addListingToSavedListings = async (userID, listingID) => {
+    const currUser = await usersCollection.doc(userID).get();
+    let currUserListings = currUser.data().savedListings;
+    currUserListings.push(listingID);
+    await usersCollection.doc(userID).update({
+        savedListings: currUserListings
+    });
+}
+
+export const removeListingFromSavedListings = async (userID, listingID) => {
+    const currUser = await usersCollection.doc(userID).get();
+    let currUserListings = currUser.data().savedListings;
+    currUserListings = currUserListings.filter(listing => listing !== listingID);
+    await usersCollection.doc(userID).update({
+        savedListings: currUserListings
+    });
+}
+
+export const getAllSavedListings = async (userID) => {
+    const currUser = await usersCollection.doc(userID).get();
+    let currUserListingIDs = currUser.data().savedListings;
+    let savedListings = [];
+    for (const ID of currUserListingIDs) {
+        const listing = await listingsCollection.doc(ID).get();
+        savedListings.push(listing.data());
+    }
+    return savedListings;
+}
 
 export const registerUser = async (email, password, firstName, lastName) => {
     let errMsg = "";
@@ -99,7 +150,7 @@ export const resetPassword = async (email) => {
     });
 }
 
-export const updateUser = async (user) => {
+export const updateAuthUser = async (user) => {
     const currUser = firebase.auth().currentUser;
     await currUser.updateProfile({
         displayName: user.firstName + " " + user.lastName,
@@ -133,4 +184,9 @@ export const uploadImage = async (image) => {
         alert(error.message);
     });
     return pictureUrl;
+}
+
+export const getUserID = async (email) => {
+    const currUser = await usersCollection.where('email', '==', email).get();
+    return currUser.docs[0].id;
 }

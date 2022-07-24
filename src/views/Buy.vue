@@ -36,10 +36,10 @@
                 :numOfBaths="listing.bathrooms"
                 :roomType="listing.roomType"
                 :image="listing.images[0]"
-                :isHearted="isHearted"
+                :isHearted="isHearted(listing.id)"
                 class="w-80 md:w-96"
-                @isClick="handleListingClick(listing)"
-                @updateHeart="handleHeartClick"/>
+                @heartClick="handleHeartClick(listing)"
+                @isClick="handleListingClick(listing)"/>
         </template>
     </div>
 
@@ -60,7 +60,7 @@ import Dropdown from "@/components/Dropdown.vue";
 import Popup from "@/components/Popup.vue";
 import LoadingIcon from "@/components/LoadingIcon.vue";
 import Announcement from "@/components/Announcement.vue";
-import {getAllListings} from "@/firebase.js";
+import {getAllListings, getAllSavedListings, addListingToSavedListings, removeListingFromSavedListings} from "@/firebase.js";
 export default {
     name: "Buy",
     components: {
@@ -82,7 +82,7 @@ export default {
             isLoading: false,
             showAnnouncement: false,
             announcementMessage: "",
-            isHearted: false
+            savedListings: []
         }
     },
     methods: {
@@ -135,14 +135,30 @@ export default {
             this.showListingPopup = true;
             this.selectedListing = listing;
         },
-        handleHeartClick: function() {
-            if (this.$store.state.isLoggedIn) {
-                this.isHearted = !this.isHearted;
+        handleHeartClick: async function(listing) {
+            if (this.isLoggedIn) {
+                if (this.isHearted(listing.id)) {
+                    this.savedListings = this.savedListings.filter(currListing => currListing.id !== listing.id);
+                    await removeListingFromSavedListings(this.userID, listing.id);
+                }
+                else {
+                    this.savedListings.push(listing);
+                    await addListingToSavedListings(this.userID, listing.id);
+                }
             }
             else {
                 this.announcementMessage = "You must be logged in to save a listing";
                 this.showAnnouncement = true;
             }
+        },
+        isHearted: function(listingID) {
+            let isSaved = false;
+            for (const listing of this.savedListings) {
+                if (listing.id === listingID) {
+                    isSaved = true;
+                }
+            }
+            return isSaved;
         }
     },
     computed: {
@@ -194,12 +210,21 @@ export default {
                     value: "private"
                 }
             ]
+        },
+        isLoggedIn: function() {
+            return this.$store.state.isLoggedIn;
+        },
+        userID: function() {
+            return this.$store.state.userID;
         }
     },
     created: async function() {
         this.isLoading = true;
         const initialListings = await getAllListings();
         this.listings = initialListings.sort((a,b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0));
+        if (this.isLoggedIn) {
+            this.savedListings = await getAllSavedListings(this.userID);
+        }
         this.isLoading = false;
     }
 };

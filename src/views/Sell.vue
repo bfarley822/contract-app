@@ -63,7 +63,7 @@ import RadioList from "@/components/RadioList.vue";
 import NumberInput from "@/components/NumberInput.vue";
 import LoadingIcon from "@/components/LoadingIcon.vue";
 import Announcement from "@/components/Announcement.vue";
-import {createListing, uploadImage} from "@/firebase.js";
+import {createListing, uploadImage, addListingToMyListings} from "@/firebase.js";
 export default {
     name: "Sell",
     components: {
@@ -195,7 +195,8 @@ export default {
                 price: this.price,
                 roomType: this.roomType
               }
-              await createListing(listing);
+              const newListing = await createListing(listing);
+              await addListingToMyListings(this.userID, newListing.id);
               this.isLoading = false;
               this.$store.commit('setCurrTab', 'account');
               this.$router.replace({name: "Account"});
@@ -302,6 +303,9 @@ export default {
         },
         combinedAddress: function() {
           return this.addressL1 + " " + this.addressL2 + " " + this.city + ", " + this.state + " " + this.zipCode;
+        },
+        userID: function() {
+          return this.$store.state.userID;
         }
     }
 };

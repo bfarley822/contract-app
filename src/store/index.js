@@ -7,7 +7,8 @@ export default createStore({
     state: {
         user: {},
         isLoggedIn: false,
-        currTab: "home"
+        currTab: "home",
+        userID: ""
     },
     mutations: {
         setUser (state, user) {
@@ -18,6 +19,9 @@ export default createStore({
         },
         setCurrTab (state, tab) {
             state.currTab = tab;
+        },
+        setUserID (state, ID) {
+            state.userID = ID;
         }
     },
     actions: {

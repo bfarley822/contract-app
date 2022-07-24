@@ -64,8 +64,8 @@ export default {
         }
     },
     methods: {
-        handleHeartClick: function() {
-            this.$emit('updateHeart');
+        handleHeartClick: async function() {
+            this.$emit('heartClick');
         },
         handleListingClick: function() {
             this.$emit('isClick');

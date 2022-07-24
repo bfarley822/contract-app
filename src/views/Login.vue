@@ -63,7 +63,7 @@ import Button from "@/components/Button.vue";
 import FormGridLabel from "@/components/FormGridLabel.vue";
 import Announcement from "@/components/Announcement.vue";
 import LoadingIcon from "@/components/LoadingIcon.vue";
-import {registerUser, loginUser, resetPassword} from "@/firebase.js";
+import {registerUser, loginUser, resetPassword, getUserID} from "@/firebase.js";
 export default {
     name: "Login",
     components: {
@@ -237,9 +237,11 @@ export default {
                 this.announcementMessage = "Error";
             }
         },
-        loginTheUser: function(user) {
+        loginTheUser: async function(user) {
             this.$store.commit('setUser', user);
             this.$store.commit('setLoggedIn');
+            const userID = await getUserID(user.email);
+            this.$store.commit('setUserID', userID);
             this.isLoading = false;
             this.$store.commit('setCurrTab', 'account');
             this.$router.replace({name: "Account"});
