@@ -6,21 +6,21 @@
         <p class="text-2xl pb-4 flex justify-center">Add Details</p>
         <div class="grid grid-cols-2 gap-2 items-center formGridStyle">
           <FormGridLabel text="Address Line 1" :required="true"/>
-          <TextInput :error="addr1Error" @update="handleAL1"/>
+          <TextInput :error="addr1Error" :text="addressL1" @update="handleAL1"/>
           <FormGridLabel text="Address Line 2"/>
-          <TextInput @update="handleAL2"/>
+          <TextInput :text="addressL2" @update="handleAL2"/>
           <FormGridLabel text="City" :required="true"/>
-          <TextInput :error="cityError" @update="handleCity"/>
+          <TextInput :text="city" :error="cityError" @update="handleCity"/>
           <FormGridLabel text="State" :required="true"/>
-          <TextInput :error="stateError" @update="handleState"/>
+          <TextInput :text="state" :error="stateError" @update="handleState"/>
           <FormGridLabel text="Zip Code" :required="true"/>
-          <NumberInput :error="zipError" max="99999" @update="handleZipCode"/>
+          <NumberInput :text="zipCode" :error="zipError" max="99999" @update="handleZipCode"/>
           <FormGridLabel text="Price" :required="true" class="pt-8"/>
-          <NumberInput :error="priceError" max="5000" @update="handlePrice" class="pt-8"/>
+          <NumberInput :text="price" :error="priceError" max="5000" @update="handlePrice" class="pt-8"/>
           <FormGridLabel text="# of Bedrooms" :required="true"/>
-          <NumberInput :error="bedroomError" max="9" @update="handleNumBedrooms"/>
+          <NumberInput :text="numBeds" :error="bedroomError" max="9" @update="handleNumBedrooms"/>
           <FormGridLabel text="# of Bathrooms" :required="true"/>
-          <NumberInput :error="bathroomError" max="9" @update="handleNumBathrooms"/>
+          <NumberInput :text="numBaths" :error="bathroomError" max="9" @update="handleNumBathrooms"/>
           <FormGridLabel text="Room Type" :required="true"/>
           <RadioList :options="roomTypeOptions" @update="handleRoomType"/>
         </div>     
@@ -194,6 +194,9 @@ export default {
               }
               await createListing(listing);
               this.isLoading = false;
+              this.$store.commit('setCurrTab', 'account');
+              this.$router.replace({name: "Account"});
+              //this.clearPageData(); 
             }
           }
           else {
@@ -267,6 +270,18 @@ export default {
           else {
             return true;
           }
+        },
+        clearPageData: function() {
+          this.roomType = "";
+          this.numBaths = "";
+          this.numBeds = "";
+          this.price = "";
+          this.zipCode = "";
+          this.state = "";
+          this.city = "";
+          this.addressL2 = "";
+          this.addressL1 = "";
+          this.images = [];
         }
     },
     computed: {

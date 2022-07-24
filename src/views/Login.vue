@@ -240,8 +240,8 @@ export default {
         loginTheUser: function(user) {
             this.$store.commit('setUser', user);
             this.$store.commit('setLoggedIn');
-            this.$store.commit('setCurrTab', 'account');
             this.isLoading = false;
+            this.$store.commit('setCurrTab', 'account');
             this.$router.replace({name: "Account"});
         },
         handlePasswordReset: async function() {

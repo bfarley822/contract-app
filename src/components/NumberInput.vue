@@ -2,7 +2,7 @@
     <div>
         <input 
             type="number" 
-            :value="input"
+            v-model="input"
             step="0.5"
             :min="min"
             :max="max"
@@ -24,9 +24,6 @@ export default {
             type: String,
             default: ""
         },
-        value: {
-            type: String
-        },
         width: {
             type: String,
             default: "20"
@@ -47,10 +44,14 @@ export default {
             type: Boolean,
             default: false
         },
+        text: {
+            type: String,
+            default: ""
+        }
     },
     data: function() {
         return {
-            input: ""
+            input: this.text
         }
     },
     methods: {
