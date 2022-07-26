@@ -12,8 +12,8 @@
         <div class="w-full h-24 bg-gray-100 border-r border-l border-b border-gray-300 rounded-b-lg" @click="handleListingClick">
             <div class="px-4 py-2 ">
                 <p class="font-semibold text-xl">${{dollarsPerMonth}}/month</p>
-                <p class="text-md pb-px">{{numOfBeds}} bed {{numOfBaths}} bath - {{roomTypeString}} Room</p>
-                <p class="text-xs">{{address}}</p>
+                <p class="text-md pb-px md:pb-0 md:text-lg">{{numOfBeds}} bed {{numOfBaths}} bath - {{roomTypeString}} Room</p>
+                <p class="text-xs md:text-sm">{{address}}</p>
             </div>
         </div>
     </div>

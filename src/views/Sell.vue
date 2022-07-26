@@ -194,7 +194,8 @@ export default {
                 images: imageURLs,
                 price: this.price,
                 roomType: this.roomType,
-                ownerID: this.userID
+                ownerID: this.userID,
+                ownerEmail: this.userEmail
               }
               const newListing = await createListing(listing);
               await addListingToMyListings(this.userID, newListing.id);
@@ -307,6 +308,9 @@ export default {
         },
         userID: function() {
           return this.$store.state.userID;
+        },
+        userEmail: function() {
+          return this.$store.state.user.email;
         }
     }
 };

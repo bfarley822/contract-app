@@ -21,9 +21,7 @@
                 :popupTitle="selectedListing.address ?? ''"
                 @close="showListingPopup = false"
             >
-                <div>
-                    Test message
-                </div>
+                <ListingPopupView :listing="selectedListing"/>
             </Popup>
         </div>
     </div>
@@ -61,6 +59,7 @@ import Dropdown from "@/components/Dropdown.vue";
 import Popup from "@/components/Popup.vue";
 import LoadingIcon from "@/components/LoadingIcon.vue";
 import Announcement from "@/components/Announcement.vue";
+import ListingPopupView from "@/components/ListingPopupView.vue";
 import {getAllListings, addListingToSavedListings, removeListingFromSavedListings} from "@/firebase.js";
 export default {
     name: "Buy",
@@ -70,7 +69,8 @@ export default {
         Dropdown,
         Popup,
         LoadingIcon,
-        Announcement
+        Announcement,
+        ListingPopupView
     },  
     data: function() {
         return {

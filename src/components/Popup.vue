@@ -15,7 +15,7 @@
           >&#8203;</span
         >
         <div
-          class="inline-block bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all my-8 align-middle w-full md:w-1/2"
+          class="inline-block bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all my-8 align-middle w-full md:w-2/3"
           role="dialog"
           aria-modal="true"
           aria-labelledby="popup-title"
