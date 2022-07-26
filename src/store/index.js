@@ -8,7 +8,9 @@ export default createStore({
         user: {},
         isLoggedIn: false,
         currTab: "home",
-        userID: ""
+        userID: "",
+        savedListings: [],
+        myListings: []
     },
     mutations: {
         setUser (state, user) {
@@ -22,6 +24,26 @@ export default createStore({
         },
         setUserID (state, ID) {
             state.userID = ID;
+        },
+
+        setSavedListings (state, listings) {
+            state.savedListings = listings;
+        },
+        addSavedListing (state, listing) {
+            state.savedListings.push(listing);
+        },
+        removeSavedListing (state, listing) {
+            state.savedListings = state.savedListings.filter(currListing => currListing.id !== listing.id);
+        },
+
+        setMyListings (state, listings) {
+            state.myListings = listings;
+        },
+        addMyListing (state, listing) {
+            state.myListings.push(listing);
+        },
+        removeMyListing (state, listing) {
+            state.myListings = state.myListings.filter(currListing => currListing.id !== listing.id);
         }
     },
     actions: {

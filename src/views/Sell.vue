@@ -193,7 +193,8 @@ export default {
                 bedrooms: this.numBeds,
                 images: imageURLs,
                 price: this.price,
-                roomType: this.roomType
+                roomType: this.roomType,
+                ownerID: this.userID
               }
               const newListing = await createListing(listing);
               await addListingToMyListings(this.userID, newListing.id);

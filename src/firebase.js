@@ -57,7 +57,8 @@ export const getAllMyListings = async (userID) => {
     let userListings = [];
     for (const ID of currUserListingIDs) {
         const listing = await listingsCollection.doc(ID).get();
-        userListings.push(listing.data());
+        const idListing = {id: listing.id, ...listing.data()};
+        userListings.push(idListing);
     }
     return userListings;
 }
@@ -86,7 +87,8 @@ export const getAllSavedListings = async (userID) => {
     let savedListings = [];
     for (const ID of currUserListingIDs) {
         const listing = await listingsCollection.doc(ID).get();
-        savedListings.push(listing.data());
+        const idListing = {id: listing.id, ...listing.data()};
+        savedListings.push(idListing);
     }
     return savedListings;
 }

@@ -28,7 +28,7 @@
         <Button :text="buttonText" backgroundColor="blue-700" class="flex justify-center md:justify-end py-8 md:mr-6" @isClick="handleUpdateDetails"/>
       </div>
     </div>
-    <div>
+    <div class="border-b pb-2">
       <p class="text-2xl pt-4 pb-8 md:pt-8">My Listings</p>
       <div class="flex items-center overflow-x-auto">
         <div class="flex flex-nowrap pb-4">
@@ -40,7 +40,9 @@
                 :numOfBaths="listing.bathrooms"
                 :roomType="listing.roomType"
                 :image="listing.images[0]"
-                class="mr-4 w-72 md:w-96"/>
+                :hideHeart="hideHeart(listing.ownerID)"
+                class="mr-4 w-72 md:w-96"
+                @isClick="handleListingClick(listing)"/>
         </template>
         </div>
       </div>
@@ -57,11 +59,25 @@
                 :numOfBaths="listing.bathrooms"
                 :roomType="listing.roomType"
                 :image="listing.images[0]"
-                class="mr-4 w-72 md:w-96"/>
+                :isHearted="isHearted(listing.id)"
+                class="mr-4 w-72 md:w-96"
+                @heartClick="handleHeartClick(listing)"
+                @isClick="handleListingClick(listing)"/>
         </template>
         </div>
       </div>
     </div>
+
+    <Popup
+        v-show="showListingPopup"
+        :popupTitle="selectedListing.address ?? ''"
+        @close="showListingPopup = false"
+    >
+        <div>
+            Test message
+        </div>
+    </Popup>
+
   </div>
 </template>
 
@@ -71,7 +87,8 @@ import TextInput from "@/components/TextInput.vue";
 import Button from "@/components/Button.vue";
 import ListingCard from "@/components/ListingCard.vue";
 import LoadingIcon from "@/components/LoadingIcon.vue";
-import {updateAuthUser, uploadProfilePic, getAllMyListings, getAllSavedListings} from "@/firebase.js";
+import Popup from "@/components/Popup.vue";
+import {updateAuthUser, uploadProfilePic, addListingToSavedListings, removeListingFromSavedListings} from "@/firebase.js";
 export default {
     name: "Account",
     components: {
@@ -79,7 +96,8 @@ export default {
       TextInput,
       Button,
       ListingCard,
-      LoadingIcon
+      LoadingIcon,
+      Popup
 },  
     props: {
         
@@ -94,8 +112,8 @@ export default {
             phoneNumber: "",
             email: "",
             isLoading: false,
-            myListings: [],
-            savedListings: []
+            showListingPopup: false,
+            selectedListing: {}
         }
     },
     methods: {
@@ -137,6 +155,32 @@ export default {
           await updateAuthUser(user);
           this.$store.commit('setUser', user);
           this.isLoading = false;
+        },
+        handleListingClick: function(listing) {
+            this.showListingPopup = true;
+            this.selectedListing = listing;
+        },
+        handleHeartClick: async function(listing) {
+            if (this.isHearted(listing.id)) {
+                this.$store.commit('removeSavedListing', listing);
+                await removeListingFromSavedListings(this.userID, listing.id);
+            }
+            else {
+                this.$store.commit('addSavedListing', listing);
+                await addListingToSavedListings(this.userID, listing.id);
+            }
+        },
+        isHearted: function(listingID) {
+            let isSaved = false;
+            for (var listing of this.savedListings) {
+                if (listing.id === listingID) {
+                    isSaved = true;
+                }
+            }
+            return isSaved;
+        },
+        hideHeart: function(listingOwnerID) {
+          return listingOwnerID === this.userID;
         }
     },
     computed: {
@@ -148,6 +192,15 @@ export default {
         },
         userImage: function() {
           return this.user.photoURL;
+        },
+        savedListings: function() {
+          return this.$store.state.savedListings;
+        },
+        userID: function() {
+            return this.$store.state.userID;
+        },
+        myListings: function() {
+          return this.$store.state.myListings;
         }
     }, 
     created: async function() {
@@ -156,9 +209,6 @@ export default {
       this.phoneNumber = this.user.phoneNumber;
       this.email = this.user.email;
       this.imageURL = this.user.photoURL;
-      
-      this.myListings = await getAllMyListings(this.$store.state.userID);
-      this.savedListings = await getAllSavedListings(this.$store.state.userID);
     }
 };
 </script>

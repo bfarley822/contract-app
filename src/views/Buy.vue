@@ -37,6 +37,7 @@
                 :roomType="listing.roomType"
                 :image="listing.images[0]"
                 :isHearted="isHearted(listing.id)"
+                :hideHeart="hideHeart(listing.ownerID)"
                 class="w-80 md:w-96"
                 @heartClick="handleHeartClick(listing)"
                 @isClick="handleListingClick(listing)"/>
@@ -60,7 +61,7 @@ import Dropdown from "@/components/Dropdown.vue";
 import Popup from "@/components/Popup.vue";
 import LoadingIcon from "@/components/LoadingIcon.vue";
 import Announcement from "@/components/Announcement.vue";
-import {getAllListings, getAllSavedListings, addListingToSavedListings, removeListingFromSavedListings} from "@/firebase.js";
+import {getAllListings, addListingToSavedListings, removeListingFromSavedListings} from "@/firebase.js";
 export default {
     name: "Buy",
     components: {
@@ -81,8 +82,7 @@ export default {
             selectedListing: {},
             isLoading: false,
             showAnnouncement: false,
-            announcementMessage: "",
-            savedListings: []
+            announcementMessage: ""
         }
     },
     methods: {
@@ -138,11 +138,11 @@ export default {
         handleHeartClick: async function(listing) {
             if (this.isLoggedIn) {
                 if (this.isHearted(listing.id)) {
-                    this.savedListings = this.savedListings.filter(currListing => currListing.id !== listing.id);
+                    this.$store.commit('removeSavedListing', listing);
                     await removeListingFromSavedListings(this.userID, listing.id);
                 }
                 else {
-                    this.savedListings.push(listing);
+                    this.$store.commit('addSavedListing', listing);
                     await addListingToSavedListings(this.userID, listing.id);
                 }
             }
@@ -153,12 +153,15 @@ export default {
         },
         isHearted: function(listingID) {
             let isSaved = false;
-            for (const listing of this.savedListings) {
+            for (var listing of this.savedListings) {
                 if (listing.id === listingID) {
                     isSaved = true;
                 }
             }
             return isSaved;
+        },
+        hideHeart: function(listingOwnerID) {
+          return listingOwnerID === this.userID;
         }
     },
     computed: {
@@ -216,15 +219,15 @@ export default {
         },
         userID: function() {
             return this.$store.state.userID;
+        },
+        savedListings: function() {
+            return this.$store.state.savedListings;
         }
     },
     created: async function() {
         this.isLoading = true;
         const initialListings = await getAllListings();
         this.listings = initialListings.sort((a,b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0));
-        if (this.isLoggedIn) {
-            this.savedListings = await getAllSavedListings(this.userID);
-        }
         this.isLoading = false;
     }
 };
