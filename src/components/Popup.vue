@@ -1,8 +1,8 @@
 <template>
   <transition name="modal-fade">
-    <div class="fixed z-50 inset-0 overflow-y-auto">
+    <div class="fixed z-50 inset-0">
       <div
-        class="items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center block p-0"
+        class="items-end justify-center pt-4 px-4 pb-20 text-center block p-0"
       >
         <div class="fixed inset-0 transition-opacity" aria-hidden="true">
           <div class="absolute inset-0 bg-gray-500 opacity-50"></div>
@@ -15,21 +15,24 @@
           >&#8203;</span
         >
         <div
-          class="inline-block bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all my-8 align-middle w-full md:w-2/3"
+          class="inline-block bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all my-8 align-middle w-full md:w-1/2 maxHeight overflow-y-auto"
           role="dialog"
           aria-modal="true"
           aria-labelledby="popup-title"
         >
-          <div class="bg-white p-4">
-            <div class="sm:flex sm:items-start">
-              <div class="mt-0 ml-4 :text-left">
+        <div class="absolute top-2 right-2">
+          <i class="fa-solid fa-xmark px-2 cursor-pointer text-2xl" @click="$emit('close')"></i>
+        </div>
+          <div class="bg-white p-4 max-h-screen">
+            <div class="">
+              <div class="mt-0 :text-left">
                 <p
-                  class="text-2xl font-medium text-gray-700"
+                  class="text-2xl font-medium text-gray-700 border-b pb-2 w-full"
                   id="popup-title"
                 >
                   {{ popupTitle }}
                 </p>
-                <div class="mt-2">
+                <div class="mt-4">
                   <p class="text-gray-600">
                     <slot/>
                   </p>
@@ -39,10 +42,10 @@
           </div>
           <div class="bg-gray-50 px-4 py-3 flex flex-row-reverse">
             <Button
-                text="Save"
+                :text="isHearted ? 'Unsave' : 'Save'"
                 backgroundColor="blue-700"
                 class="pl-2"
-                @isClick="close"/>
+                @isClick="action"/>
             <Button
                 text="Close"
                 backgroundColor="white"
@@ -66,12 +69,25 @@ export default {
     popupTitle: {
       type: String,
       required: true,
+    },
+    isHearted: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
     close() {
       this.$emit("close");
+    },
+    action() {
+      this.$emit("action");
     }
   },
 };
 </script>
+
+<style scoped>
+.maxHeight {
+  max-height: 100vh;
+}
+</style>

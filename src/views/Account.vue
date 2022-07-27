@@ -42,7 +42,7 @@
                 :image="listing.images[0]"
                 :hideHeart="hideHeart(listing.ownerID)"
                 class="mr-4 w-72 md:w-96"
-                @isClick="handleListingClick(listing)"/>
+                @isClick="handleMyListingClick(listing)"/>
         </template>
         </div>
       </div>
@@ -71,11 +71,12 @@
     <Popup
         v-show="showListingPopup"
         :popupTitle="selectedListing.address ?? ''"
+        :isHearted="isHearted(selectedListing.id)"
         @close="showListingPopup = false"
+        @action="handlePopupSave(selectedListing)"
     >
-        <div>
-            Test message
-        </div>
+      <div v-if="isMyListingPopup"> My Listing Popup</div>
+      <ListingPopupView v-else :listing="selectedListing"/>
     </Popup>
 
   </div>
@@ -88,6 +89,7 @@ import Button from "@/components/Button.vue";
 import ListingCard from "@/components/ListingCard.vue";
 import LoadingIcon from "@/components/LoadingIcon.vue";
 import Popup from "@/components/Popup.vue";
+import ListingPopupView from "@/components/ListingPopupView.vue";
 import {updateAuthUser, uploadProfilePic, addListingToSavedListings, removeListingFromSavedListings} from "@/firebase.js";
 export default {
     name: "Account",
@@ -97,7 +99,8 @@ export default {
       Button,
       ListingCard,
       LoadingIcon,
-      Popup
+      Popup,
+      ListingPopupView
 },  
     props: {
         
@@ -113,7 +116,8 @@ export default {
             email: "",
             isLoading: false,
             showListingPopup: false,
-            selectedListing: {}
+            selectedListing: {},
+            isMyListingPopup: false
         }
     },
     methods: {
@@ -157,8 +161,14 @@ export default {
           this.isLoading = false;
         },
         handleListingClick: function(listing) {
-            this.showListingPopup = true;
             this.selectedListing = listing;
+            this.isMyListingPopup = false;
+            this.showListingPopup = true;
+        },
+        handleMyListingClick: function(listing) {
+          this.selectedListing = listing;
+          this.isMyListingPopup = true;
+          this.showListingPopup = true;
         },
         handleHeartClick: async function(listing) {
             if (this.isHearted(listing.id)) {
@@ -181,6 +191,12 @@ export default {
         },
         hideHeart: function(listingOwnerID) {
           return listingOwnerID === this.userID;
+        },
+        handlePopupSave: async function(listing) {
+            this.isLoading = true;
+            await this.handleHeartClick(listing);
+            this.showListingPopup = false;
+            this.isLoading = false;
         }
     },
     computed: {

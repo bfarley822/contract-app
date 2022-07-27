@@ -19,7 +19,9 @@
             <Popup
                 v-show="showListingPopup"
                 :popupTitle="selectedListing.address ?? ''"
+                :isHearted="isHearted(selectedListing.id)"
                 @close="showListingPopup = false"
+                @action="handlePopupSave(selectedListing)"
             >
                 <ListingPopupView :listing="selectedListing"/>
             </Popup>
@@ -132,8 +134,8 @@ export default {
             }
         },
         handleListingClick: function(listing) {
-            this.showListingPopup = true;
             this.selectedListing = listing;
+            this.showListingPopup = true;
         },
         handleHeartClick: async function(listing) {
             if (this.isLoggedIn) {
@@ -162,6 +164,12 @@ export default {
         },
         hideHeart: function(listingOwnerID) {
           return listingOwnerID === this.userID;
+        },
+        handlePopupSave: async function(listing) {
+            this.isLoading = true;
+            await this.handleHeartClick(listing);
+            this.showListingPopup = false;
+            this.isLoading = false;
         }
     },
     computed: {
