@@ -20,6 +20,7 @@
                 v-show="showListingPopup"
                 :popupTitle="selectedListing.address ?? ''"
                 :isHearted="isHearted(selectedListing.id)"
+                :hideButtons="selectedListing.ownerID === userID"
                 @close="showListingPopup = false"
                 @action="handlePopupSave(selectedListing)"
             >
@@ -166,10 +167,16 @@ export default {
           return listingOwnerID === this.userID;
         },
         handlePopupSave: async function(listing) {
-            this.isLoading = true;
-            await this.handleHeartClick(listing);
-            this.showListingPopup = false;
-            this.isLoading = false;
+            if (this.isLoggedIn) {
+                this.isLoading = true;
+                await this.handleHeartClick(listing);
+                this.showListingPopup = false;
+                this.isLoading = false;
+            }
+            else {
+                this.announcementMessage = "You must be logged in to save a listing";
+                this.showAnnouncement = true;
+            }
         }
     },
     computed: {
@@ -235,8 +242,8 @@ export default {
     created: async function() {
         this.isLoading = true;
         let initialListings = await getAllListings();
-        initialListings = initialListings.sort((a,b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0));
-        this.listings = initialListings.filter(listing => listing.ownerID !== this.userID);
+        this.listings = initialListings.sort((a,b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0));
+        // this.listings = initialListings.filter(listing => listing.ownerID !== this.userID);
         this.isLoading = false;
     }
 };

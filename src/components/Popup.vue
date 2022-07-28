@@ -37,7 +37,7 @@
                     <slot/>
                   </p>
                 </div>
-                <div class="border-t pl-4 pb-4 md:pb-0 pt-3 flex flex-row-reverse">
+                <div v-if="!hideButtons" class="border-t pl-4 pb-4 md:pb-0 pt-3 flex flex-row-reverse">
                   <Button
                       :text="isHearted ? 'Unsave' : 'Save'"
                       backgroundColor="blue-700"
@@ -71,6 +71,10 @@ export default {
       required: true,
     },
     isHearted: {
+      type: Boolean,
+      default: false
+    },
+    hideButtons: {
       type: Boolean,
       default: false
     }

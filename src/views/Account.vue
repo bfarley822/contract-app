@@ -70,8 +70,9 @@
 
     <Popup
         v-show="showListingPopup"
-        :popupTitle="popupTitle"
+        :popupTitle="selectedListing.address ?? ''"
         :isHearted="isHearted(selectedListing.id)"
+        :hideButtons="isMyListingPopup"
         @close="showListingPopup = false"
         @action="handlePopupSave(selectedListing)"
     >
