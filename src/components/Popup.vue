@@ -37,20 +37,20 @@
                     <slot/>
                   </p>
                 </div>
+                <div class="border-t pl-4 pb-4 md:pb-0 pt-3 flex flex-row-reverse">
+                  <Button
+                      :text="isHearted ? 'Unsave' : 'Save'"
+                      backgroundColor="blue-700"
+                      class="pl-2"
+                      @isClick="action"/>
+                  <Button
+                      text="Close"
+                      backgroundColor="gray-100"
+                      textColor="gray-700"
+                      @isClick="close"/>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="bg-gray-50 px-4 py-3 flex flex-row-reverse">
-            <Button
-                :text="isHearted ? 'Unsave' : 'Save'"
-                backgroundColor="blue-700"
-                class="pl-2"
-                @isClick="action"/>
-            <Button
-                text="Close"
-                backgroundColor="white"
-                textColor="gray-700"
-                @isClick="close"/>
           </div>
         </div>
       </div>
@@ -88,6 +88,6 @@ export default {
 
 <style scoped>
 .maxHeight {
-  max-height: 100vh;
+  max-height: 80vh;
 }
 </style>

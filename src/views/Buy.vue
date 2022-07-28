@@ -234,8 +234,9 @@ export default {
     },
     created: async function() {
         this.isLoading = true;
-        const initialListings = await getAllListings();
-        this.listings = initialListings.sort((a,b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0));
+        let initialListings = await getAllListings();
+        initialListings = initialListings.sort((a,b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0));
+        this.listings = initialListings.filter(listing => listing.ownerID !== this.userID);
         this.isLoading = false;
     }
 };

@@ -70,13 +70,13 @@
 
     <Popup
         v-show="showListingPopup"
-        :popupTitle="selectedListing.address ?? ''"
+        :popupTitle="popupTitle"
         :isHearted="isHearted(selectedListing.id)"
         @close="showListingPopup = false"
         @action="handlePopupSave(selectedListing)"
     >
-      <div v-if="isMyListingPopup"> My Listing Popup</div>
-      <ListingPopupView v-else :listing="selectedListing"/>
+      <!-- <EditListingView v-if="isMyListingPopup" :listing="selectedListing"/> -->
+      <ListingPopupView :listing="selectedListing"/>
     </Popup>
 
   </div>
@@ -90,6 +90,7 @@ import ListingCard from "@/components/ListingCard.vue";
 import LoadingIcon from "@/components/LoadingIcon.vue";
 import Popup from "@/components/Popup.vue";
 import ListingPopupView from "@/components/ListingPopupView.vue";
+// import EditListingView from "@/components/EditListingView.vue";
 import {updateAuthUser, uploadProfilePic, addListingToSavedListings, removeListingFromSavedListings} from "@/firebase.js";
 export default {
     name: "Account",
@@ -100,7 +101,8 @@ export default {
       ListingCard,
       LoadingIcon,
       Popup,
-      ListingPopupView
+      ListingPopupView,
+      // EditListingView
 },  
     props: {
         
@@ -217,6 +219,9 @@ export default {
         },
         myListings: function() {
           return this.$store.state.myListings;
+        },
+        popupTitle: function() {
+          return this.isMyListingPopup ? "Edit - " + this.selectedListing.address : this.selectedListing.address;
         }
     }, 
     created: async function() {

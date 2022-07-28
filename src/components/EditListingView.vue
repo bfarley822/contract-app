@@ -1,85 +1,72 @@
 <template>
-  <div>
-    <p class="text-3xl w-full border-b font-medium flex justify-center md:justify-start">Create Listing</p>
-    <div class="grid grid-cols-1 md:grid-cols-2">
-      <div class="lg:border-r border-b p-4">
-        <p class="text-2xl pb-4 flex justify-center">Add Details</p>
-        <div class="grid grid-cols-2 gap-2 items-center formGridStyle">
-          <FormGridLabel text="Address Line 1" :required="true"/>
-          <TextInput :error="addr1Error" :text="addressL1" @update="handleAL1"/>
-          <FormGridLabel text="Address Line 2"/>
-          <TextInput :text="addressL2" @update="handleAL2"/>
-          <FormGridLabel text="City" :required="true"/>
-          <TextInput :text="city" :error="cityError" @update="handleCity"/>
-          <FormGridLabel text="State" :required="true"/>
-          <TextInput :text="state" :error="stateError" @update="handleState"/>
-          <FormGridLabel text="Zip Code" :required="true"/>
-          <NumberInput :text="zipCode" :error="zipError" max="99999" @update="handleZipCode"/>
-          <FormGridLabel text="Price" :required="true" class="pt-8"/>
-          <NumberInput :text="price" :error="priceError" max="5000" @update="handlePrice" class="pt-8"/>
-          <FormGridLabel text="# of Bedrooms" :required="true"/>
-          <NumberInput :text="numBeds" :error="bedroomError" max="9" @update="handleNumBedrooms"/>
-          <FormGridLabel text="# of Bathrooms" :required="true"/>
-          <NumberInput :text="numBaths" :error="bathroomError" max="9" @update="handleNumBathrooms"/>
-          <FormGridLabel text="Room Type" :required="true"/>
-          <RadioList :options="roomTypeOptions" @update="handleRoomType"/>
-        </div>     
-      </div>
-      <div class="grid justify-items-center border-b pt-4 pb-8 pl-4">
-        <p class="text-2xl pb-4">Upload Images</p>
-        <input type="file" ref="fileInput" name="file" id="file" accept="image/png, image/jpeg" multiple @change="handleFiles" class="hidden"/>
-        <label for="file" class="mb-4 cursor-pointer border border-gray-300 rounded py-1 px-4 text-lg bg-gray-200 text-gray-700 hover:opacity-80">Select Images</label>
-        <div class="border w-full h-full bg-white">
-          <div v-if="images.length === 0" class="grid place-content-center customHeight">
-            <p class="text-gray-300">No images</p>
-          </div>
-          <div v-else class="p-4 grid grid-cols-1 xl:grid-cols-2 justify-items-center gap-2 w-full customHeight overflow-y-auto">
-            <template v-for="image in images" :key="image">
-              <div class="imagePreviewWrapper" :style="{ 'background-image': `url(${image})`}"></div>
-            </template>
-          </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2">
+        <div class="">
+            <div class="grid grid-cols-1 items-center pl-8">
+                <FormGridLabel text="Address Line 1" :required="true" alignment="start"/>
+                <TextInput :error="addr1Error" :text="addressL1" @update="handleAL1" class="pb-2"/>
+                <FormGridLabel text="Address Line 2" alignment="start"/>
+                <TextInput :text="addressL2" @update="handleAL2" class="pb-2"/>
+                <FormGridLabel text="City" :required="true" alignment="start"/>
+                <TextInput :text="city" :error="cityError" @update="handleCity" class="pb-2"/>
+                <FormGridLabel text="State" :required="true" alignment="start"/>
+                <TextInput :text="state" :error="stateError" @update="handleState" class="pb-2"/>
+                <FormGridLabel text="Zip Code" :required="true" alignment="start"/>
+                <NumberInput :text="zipCode" :error="zipError" max="99999" @update="handleZipCode"/>
+                <FormGridLabel text="Price" :required="true" class="pt-8" alignment="start"/>
+                <NumberInput :text="price" :error="priceError" max="5000" @update="handlePrice" class="pb-2"/>
+                <FormGridLabel text="# of Bedrooms" :required="true" alignment="start"/>
+                <NumberInput :text="numBeds" :error="bedroomError" max="9" @update="handleNumBedrooms" class="pb-2"/>
+                <FormGridLabel text="# of Bathrooms" :required="true" alignment="start"/>
+                <NumberInput :text="numBaths" :error="bathroomError" max="9" @update="handleNumBathrooms" class="pb-2"/>
+                <FormGridLabel text="Room Type" :required="true" alignment="start"/>
+                <RadioList :options="roomTypeOptions" @update="handleRoomType" class="pb-6"/>
+            </div>     
         </div>
-      </div>
-    </div>
-    <div class="grid justify-items-center pt-4">
-      <Button text="Submit" backgroundColor="blue-700" @isClick="handleListingSubmit"/>
-    </div>
+        <div class=" flex flex-col items-center pt-4 pb-8">
+            <div class="pb-4">
+                <input type="file" ref="fileInput2" name="file2" id="file2" accept="image/png, image/jpeg" multiple @change="handleFiles" class="hidden"/>
+                <label for="file2" class="cursor-pointer border border-gray-300 rounded py-1 px-4 text-lg bg-gray-200 text-gray-700 hover:opacity-80">Select Images</label>
+            </div>
+            <div class="border w-full h-full bg-white">
+                <div v-if="images.length === 0" class="grid place-content-center customHeight">
+                    <p class="text-gray-300">No images</p>
+                </div>
+                <div v-else class="p-4 grid grid-cols-1 justify-items-center gap-2 w-full customHeight overflow-y-auto">
+                    <template v-for="image in images" :key="image">
+                        <div class="imagePreviewWrapper" :style="{ 'background-image': `url(${image})`}"></div>
+                    </template>
+                </div>
+            </div>
+        </div>
 
-    <Announcement  
-      v-if="showAnnouncement" 
-      :message="announcementMessage" 
-      @close="showAnnouncement = false"
-    />
-
-    <LoadingIcon v-if="isLoading"/>
-  </div>
+        <LoadingIcon v-if="isLoading"/>
+    </div>
 </template>
 
 <script>
 import TextInput from "@/components/TextInput.vue";
-import Button from "@/components/Button.vue";
 import FormGridLabel from "@/components/FormGridLabel.vue";
 import RadioList from "@/components/RadioList.vue";
 import NumberInput from "@/components/NumberInput.vue";
 import LoadingIcon from "@/components/LoadingIcon.vue";
-import Announcement from "@/components/Announcement.vue";
-import {createListing, uploadImage, addListingToMyListings} from "@/firebase.js";
 export default {
-    name: "Sell",
+    name: "EditListingView",
     components: {
         TextInput,
-        Button,
         FormGridLabel,
         RadioList,
         NumberInput,
         LoadingIcon,
-        Announcement
     },  
     props: {
-        
+        listing: {
+            type: Object,
+            required: true
+        }
     },
     data: function() {
         return {
+            isLoading: false,
             roomType: "",
             numBaths: "",
             numBeds: "",
@@ -90,7 +77,6 @@ export default {
             addressL2: "",
             addressL1: "",
             images: [],
-            isLoading: false,
             showAnnouncement: false,
             announcementMessage: "",
             addr1Error: false,
@@ -179,41 +165,30 @@ export default {
           }
         },
         handleListingSubmit: async function() {
-          if (this.$store.state.isLoggedIn) {
-            if (this.hasValidInput()) {
-              this.isLoading = true;
-              let imageURLs = [];
-              for (const image of this.files) {
-                const url = await uploadImage(image);
-                imageURLs.push(url);
-              }
-              const listing = {
-                address: this.combinedAddress,
-                bathrooms: this.numBaths,
-                bedrooms: this.numBeds,
-                images: imageURLs,
-                price: this.price,
-                roomType: this.roomType,
-                ownerID: this.userID,
-                ownerEmail: this.userEmail,
-                address1: this.addressL1,
-                address2: this.addressL2,
-                city: this.city,
-                state: this.state,
-                zipCode: this.zipCode
-              }
-              const newListing = await createListing(listing);
-              await addListingToMyListings(this.userID, newListing.id);
-              this.isLoading = false;
-              this.$store.commit('setCurrTab', 'account');
-              this.$router.replace({name: "Account"});
-              //this.clearPageData(); 
-            }
-          }
-          else {
-            this.announcementMessage = "You must be logged in first in order to create a listing."
-            this.showAnnouncement = true;
-          }
+            // if (this.hasValidInput()) {
+            //     this.isLoading = true;
+            //     let imageURLs = [];
+            //     for (const image of this.files) {
+            //         //const url = await uploadImage(image);
+            //         imageURLs.push(url);
+            //     }
+            //     const listing = {
+            //         address: this.combinedAddress,
+            //         bathrooms: this.numBaths,
+            //         bedrooms: this.numBeds,
+            //         images: imageURLs,
+            //         price: this.price,
+            //         roomType: this.roomType,
+            //         address1: this.addressL1,
+            //         address2: this.addressL2,
+            //         city: this.city,
+            //         state: this.state,
+            //         zipCode: this.zipCode
+            //     }
+            //     // const newListing = await createListing(listing);
+            //     // await addListingToMyListings(this.userID, newListing.id);
+            //     this.isLoading = false;
+            // }
         },
         hasValidInput: function() {
           this.showAnnouncement = false;
@@ -282,20 +257,11 @@ export default {
             return true;
           }
         },
-        clearPageData: function() {
-          this.roomType = "";
-          this.numBaths = "";
-          this.numBeds = "";
-          this.price = "";
-          this.zipCode = "";
-          this.state = "";
-          this.city = "";
-          this.addressL2 = "";
-          this.addressL1 = "";
-          this.images = [];
-        }
     },
     computed: {
+        roomTypeString: function() {
+            return this.listing.roomType ? this.listing.roomType.charAt(0).toUpperCase() + this.listing.roomType.slice(1) : "";
+        },
         roomTypeOptions: function() {
           return [
             {
@@ -314,25 +280,34 @@ export default {
         userID: function() {
           return this.$store.state.userID;
         },
-        userEmail: function() {
-          return this.$store.state.user.email;
-        }
+    },
+    created: function() {
+        this.roomType = this.listing.roomType;
+        this.numBaths = this.listing.bathrooms;
+        this.numBeds = this.listing.bedrooms;
+        this.price = this.listing.price;
+        this.zipCode = this.listing.zipCode;
+        this.state = this.listing.state;
+        this.city = this.listing.city;
+        this.addressL2 = this.listing.address2;
+        this.addressL1 = this.listing.address1;
+        this.images = this.listing.images;
     }
 };
 </script>
 
 <style scoped>
-  .formGridStyle {
+.formGridStyle {
     grid-template-columns: 40% 60%;
-  }
-  .customHeight {
-    height: 36rem;
-  }
-  .imagePreviewWrapper {
-      width: 100%;
-      height: 256px;
-      object-fit: cover;
-      background-size: cover;
-      background-position: center center;
-  }
+}
+.customHeight {
+    height: 32rem;
+}
+.imagePreviewWrapper {
+    width: 100%;
+    height: 256px;
+    object-fit: cover;
+    background-size: cover;
+    background-position: center center;
+}
 </style>

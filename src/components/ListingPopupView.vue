@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="pb-4">
         <div class="flex w-full overflow-x-auto">
             <template v-for="image in listing.images" :key="image">
                 <img v-if="image" class="object-cover w-80 md:w-96 h-72 md:h-80 pr-1" :src="image">
