@@ -48,6 +48,7 @@
     <Announcement 
         v-if="showAnnouncement" 
         :message="announcementMessage" 
+        :yScroll="yScroll"
         @close="showAnnouncement = false"
     />
 
@@ -85,7 +86,8 @@ export default {
             selectedListing: {},
             isLoading: false,
             showAnnouncement: false,
-            announcementMessage: ""
+            announcementMessage: "",
+            yScroll: 0
         }
     },
     methods: {
@@ -177,6 +179,9 @@ export default {
                 this.announcementMessage = "You must be logged in to save a listing";
                 this.showAnnouncement = true;
             }
+        },
+        handleScroll: function(event) {
+            this.yScroll = event.path[1].scrollY;
         }
     },
     computed: {
@@ -245,6 +250,11 @@ export default {
         this.listings = initialListings.sort((a,b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0));
         // this.listings = initialListings.filter(listing => listing.ownerID !== this.userID);
         this.isLoading = false;
+
+        window.addEventListener('scroll', this.handleScroll);
+    },
+    unmounted: function() {
+        window.removeEventListener('scroll', this.handleScroll);
     }
 };
 </script>

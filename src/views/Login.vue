@@ -51,6 +51,7 @@
         <Announcement 
             v-if="showAnnouncement" 
             :message="announcementMessage" 
+            :yScroll="yScroll"
             @close="showAnnouncement = false"
         />
         <LoadingIcon v-if="isLoading"/>
@@ -97,7 +98,8 @@ export default {
             showAnnouncement: false,
             announcementMessage: "",
             showResetLinkText: false,
-            isLoading: false
+            isLoading: false,
+            yScroll: 0
         }
     },
     watch: {
@@ -270,10 +272,19 @@ export default {
             else {
                 return false;
             }
+        },
+        handleScroll: function(event) {
+          this.yScroll = event.path[1].scrollY;
         }
     },
     computed: {
         
+    },
+    created: async function() {
+        window.addEventListener('scroll', this.handleScroll);
+    },
+    unmounted: function() {
+        window.removeEventListener('scroll', this.handleScroll);
     }
 };
 </script>

@@ -48,6 +48,7 @@
     <Announcement  
       v-if="showAnnouncement" 
       :message="announcementMessage" 
+      :yScroll="yScroll"
       @close="showAnnouncement = false"
     />
 
@@ -101,7 +102,8 @@ export default {
             bedroomError: false,
             bathroomError: false,
             imageError: false,
-            files: []
+            files: [],
+            yScroll: 0
         }
     },
     methods: {
@@ -293,6 +295,9 @@ export default {
           this.addressL2 = "";
           this.addressL1 = "";
           this.images = [];
+        },
+        handleScroll: function(event) {
+          this.yScroll = event.path[1].scrollY;
         }
     },
     computed: {
@@ -317,6 +322,12 @@ export default {
         userEmail: function() {
           return this.$store.state.user.email;
         }
+    },
+    created: async function() {
+        window.addEventListener('scroll', this.handleScroll);
+    },
+    unmounted: function() {
+        window.removeEventListener('scroll', this.handleScroll);
     }
 };
 </script>
